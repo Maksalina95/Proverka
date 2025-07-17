@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>МаксМаркет</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.png" />
+</head>
+<body>
+
+  <!-- 🔍 Поисковая строка с крестиком -->
+  <div class="search-container">
+    <input type="text" id="search" placeholder="Поиск..." />
+    <span id="clear-search">✕</span>
+  </div>
+
+  <!-- 🖼️ Баннер-слайдер -->
+  <div class="slider">
+    <img src="img/banner1.jpg" alt="Баннер 1" />
+    <img src="img/banner2.jpg" alt="Баннер 2" />
+    <!-- добавь свои баннеры -->
+  </div>
+
+  <!-- 🧱 Контейнер для товаров (каталог и т.д.) -->
+  <div id="main-content">
+    <!-- сюда подгружаются товары -->
+  </div>
+
+  <!-- 📦 Панель SPA — сюда будут подгружаться страницы -->
+  <div id="panel" class="hidden">
+    <div class="panel-header">
+      <span id="panel-title"></span>
+      <button id="close-panel">✕</button>
+    </div>
+    <div id="panel-content"></div>
+  </div>
+
+  <!-- 📱 Нижнее меню -->
+  <nav class="bottom-nav">
+    <button onclick="openPanel('Адрес', 'адрес.html')">Адрес</button>
+    <button onclick="openPanel('Доставка', 'доставка.html')">Доставка</button>
+    <button onclick="openPanel('Контакты', 'контакты.html')">Контакты</button>
+    <button onclick="openPanel('Правила', 'правила.html')">Правила</button>
+    <button onclick="openPanel('Отзывы', 'reviews.html')">Отзывы</button>
+  </nav>
+
+  <!-- 📲 Установить PWA -->
+  <button id="install-button" class="install-btn hidden">Установить</button>
+
+  <script>
+    // 🔍 Очистка поиска
+    document.getElementById('clear-search').onclick = () => {
+      document.getElementById('search').value = '';
+    };
+
+    // 🌐 SPA: загрузка страницы в панель
+    function openPanel(title, url) {
+      const panel = document.getElementById('panel');
+      const content = document.getElementById('panel-content');
+      const panelTitle = document.getElementById('panel-title');
+
+      panel.classList.remove('hidden');
+      panelTitle.textContent = title;
+      content.innerHTML = 'Загрузка...';
+
+      fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          content.innerHTML = html;
+        })
+        .catch(err => {
+          content.innerHTML = 'Ошибка загрузки страницы.';
+          console.error(err);
+        });
+    }
+
+    // ❌ Закрытие панели
+    document.getElementById('close-panel').onclick = () => {
+      document.getElementById('panel').classList.add('hidden');
+    };
+
+    // 📲 Установка PWA
+    let deferredPrompt;
+    const installBtn = document.getElementById('install-button');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.classList.remove('hidden');
+    });
+
+    installBtn.addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          installBtn.classList.add('hidden');
+        });
+      }
+    });
+  </script>
+
+  <style>
+    /* 📦 Стиль панели SPA */
+    #panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #panel.hidden {
+      display: none;
+    }
+
+    .panel-header {
+      padding: 12px;
+      background: #f1f1f1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    #close-panel {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    #panel-content {
+      padding: 15px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* Пример нижней навигации */
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #eee;
+      padding: 10px;
+      z-index: 10000;
+    }
+
+    .bottom-nav button {
+      background: none;
+      border: none;
+      font-size: 14px;
+    }
+
+    .install-btn {
+      position: fixed;
+      bottom: 70px;
+      right: 15px;
+      padding: 10px 16px;
+      background: #222;
+      color: white;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .install-btn.hidden {
+      display: none;
+    }
+
+    .search-container {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-container input {
+      flex: 1;
+      padding: 8px;
+      font-size: 16px;
+    }
+
+    #clear-search {
+      margin-left: 8px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .slider {
+      display: flex;
+      overflow-x: scroll;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .slider img {
+      max-width: 80%;
+      border-radius: 10px;
+    }
+  </style>
+</body>
+</html>
