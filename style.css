@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lobster&display=swap');
+
+/* 1. Глобальные стили */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff0f6;
+  color: #4B004B;
+  overflow-x: hidden;
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+/* 2. Шапка */
+header {
+  background-color: #E0218A;
+  color: white;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  margin: 0;
+}
+
+.logo {
+  font-family: 'Lobster', cursive;
+  font-size: 24px;
+  color: #fff5fa;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Навигация хлебных крошек */
+#breadcrumb {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #e63946;
+}
+
+#breadcrumb span {
+  cursor: pointer;
+  user-select: none;
+  margin-right: 5px;
+}
+
+#breadcrumb span:hover {
+  text-decoration: underline;
+}
+
+#breadcrumb span.separator {
+  cursor: default;
+  text-decoration: none;
+  color: #888;
+}
+
+/* Остальной твой стиль - с твоего файла */
+/* ... (Вставь сюда весь твой стиль из стайл.css, который ты мне прислала) */
+
+/* Для краткости ниже — только дополнения: */
+
+/* Категории и подкатегории - кнопки */
+.category-list button,
+.subcategory-list button,
+.subsubcategory-list button {
+  margin: 6px 4px 6px 0;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background-color: #E0218A;
+  color: #fff5fa;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.category-list button:hover,
+.subcategory-list button:hover,
+.subsubcategory-list button:hover {
+  background-color: #C01578;
+}
+
+/* Список товаров - сетка */
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* Товар - карточка */
+.product-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #ffe0f2;
+  padding: 16px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.product-card h3 {
+  margin: 12px 0 8px;
+  font-size: 18px;
+  color: #4B004B;
+}
+
+.product-card p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #6a2a6c;
+}
+
+.product-card .buttons a {
+  margin-right: 8px;
+  text-decoration: none;
+  color: #E0218A;
+  font-weight: 600;
+}
+
+.product-card .buttons a:hover {
+  text-decoration: underline;
+}
