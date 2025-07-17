@@ -94,7 +94,7 @@ function loadFavorites() {
 
 // 🔍 Поиск
 function initSearch() {
-  const input = document.getElementById("searchInput");
+  const input = document.getElementById("search"); // вместо "searchInput"
   if (!input) return;
 
   input.addEventListener("input", () => {
@@ -108,7 +108,7 @@ function initSearch() {
   });
 
   // Показываем Х (очистить)
-  const clearBtn = document.getElementById("clearSearch");
+  const clearBtn = document.getElementById("clear-search"); // а не "clearSearch"
   if (clearBtn) {
     clearBtn.onclick = () => {
       input.value = "";
