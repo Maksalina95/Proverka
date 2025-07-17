@@ -1,0 +1,32 @@
+import { createRouter, createWebHashHistory } from 'vue-router'
+import { createApp } from 'vue'
+import HomePage from './pages/HomePage.vue'
+import ProductPage from './pages/ProductPage.vue'
+import CatalogPage from './pages/CatalogPage.vue'
+import FavoritesPage from './pages/FavoritesPage.vue'
+import ContactsPage from './pages/ContactsPage.vue'
+import DeliveryPage from './pages/DeliveryPage.vue'
+import RulesPage from './pages/RulesPage.vue'
+import ServicePage from './pages/ServicePage.vue'
+import NotFoundPage from './pages/NotFoundPage.vue'
+
+import App from './App.vue'
+
+const routes = [
+  { path: '/', component: HomePage },
+  { path: '/product/:id', component: ProductPage },
+  { path: '/catalog', component: CatalogPage },
+  { path: '/favorites', component: FavoritesPage },
+  { path: '/contacts', component: ContactsPage },
+  { path: '/delivery', component: DeliveryPage },
+  { path: '/rules', component: RulesPage },
+  { path: '/service', component: ServicePage },
+  { path: '/:pathMatch(.*)*', component: NotFoundPage }
+]
+
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes
+})
+
+createApp(App).use(router).mount('#app')
