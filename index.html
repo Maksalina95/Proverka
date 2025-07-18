@@ -29,20 +29,27 @@
   </section>
 
   <main>
-    <h2>Новинки</h2>
-    <ul id="suggestions"></ul>
+  <main>
+  <h2>Новинки</h2>
+  <ul id="suggestions"></ul>
 
-    <!-- ✅ Контейнер для подгрузки страниц SPA -->
-<div id="app-content">
-  <!-- Здесь будут подгружаться страницы -->
-  <div id="productList" class="product-list"></div>
+  <!-- ✅ Контейнер для подгрузки страниц SPA -->
+  <div id="app-content">
+    <!-- Здесь будут подгружаться страницы -->
+    <div id="productList" class="product-list"></div>
 
-  <!-- ✅ Добавляем скрытый каталог -->
-  <section id="catalog" style="display: none;">
-    <h2>Выберите категорию</h2>
-    <div id="categoryList" class="product-list"></div>
-  </section>
-</div>
+    <!-- ✅ Каталог со всеми уровнями -->
+    <section id="catalog" style="display: none;">
+      <h2>Выберите категорию</h2>
+      <div id="categoryList" class="product-list"></div>
+
+      <h2>Выберите подкатегорию</h2>
+      <div id="subcategoryList" class="product-list"></div>
+
+      <h2>Выберите под-подкатегорию</h2>
+      <div id="subsubcategoryList" class="product-list"></div>
+    </section>
+  </div>
   </main>
 
   <div class="bottom-icons" role="navigation" aria-label="Основное меню">
