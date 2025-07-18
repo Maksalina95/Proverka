@@ -33,10 +33,16 @@
     <ul id="suggestions"></ul>
 
     <!-- ✅ Контейнер для подгрузки страниц SPA -->
-    <div id="app-content">
-      <!-- Здесь будут подгружаться страницы -->
-      <div id="productList" class="product-list"></div>
-    </div>
+<div id="app-content">
+  <!-- Здесь будут подгружаться страницы -->
+  <div id="productList" class="product-list"></div>
+
+  <!-- ✅ Добавляем скрытый каталог -->
+  <section id="catalog" style="display: none;">
+    <h2>Выберите категорию</h2>
+    <div id="categoryList" class="product-list"></div>
+  </section>
+</div>
   </main>
 
   <div class="bottom-icons" role="navigation" aria-label="Основное меню">
