@@ -1,88 +1,25 @@
-// Импортируем baseUrl из config.js
 import { baseUrl } from './config.js';
+import { loadCatalog } from './catalog.js';
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadProducts(); // 🌟 Загружаем начальный список продуктов
-  initSlider();   // 🎠 Запускаем слайдер
+  loadPage();
+  window.addEventListener("hashchange", loadPage);
 });
 
-// 🌸 Загрузка всех товаров (на главной)
-function loadProducts() {
-  fetch(`${baseUrl}`)
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById("productList");
-      if (!container) return;
+function loadPage() {
+  const hash = window.location.hash.slice(1) || "home";
+  const app = document.getElementById("app");
 
-      container.innerHTML = "";
-      const items = data.reverse();
-
-      renderProductList(items, container);
-    });
-}
-
-// 🔄 Рендер товаров
-function renderProductList(items, container) {
-  container.innerHTML = "";
-
-  items.forEach(p => {
-    const card = document.createElement("div");
-    card.className = "product-card";
-
-    const isFavorite = getFavorites().includes(p.id);
-
-    card.innerHTML = `
-      <img src="${p.фото}" alt="${p.название}">
-      <h3>${p.название}</h3>
-      <p>${p.описание || ""}</p>
-      <p><strong>${p.цена} ₽</strong></p>
-      <a href="https://wa.me/798376280080" target="_blank">WhatsApp</a>
+  if (hash === "catalog") {
+    loadCatalog();
+  } else if (hash === "favorites") {
+    app.innerHTML = "<h2>Избранное</h2><p>Пока пусто.</p>";
+  } else if (hash === "contacts") {
+    app.innerHTML = `
+      <h2>Контакты</h2>
+      <p>Напишите нам в WhatsApp: <a href="https://wa.me/79999999999">+7 999 999-99-99</a></p>
     `;
-
-    const favBtn = document.createElement("button");
-    favBtn.className = "fav-btn";
-    favBtn.innerHTML = isFavorite ? "❤️" : "🤍";
-    favBtn.onclick = () => toggleFavorite(p.id, favBtn);
-
-    card.appendChild(favBtn);
-    container.appendChild(card);
-  });
-}
-
-// 💖 Избранное
-function getFavorites() {
-  return JSON.parse(localStorage.getItem("favorites") || "[]");
-}
-
-function toggleFavorite(id, button) {
-  let favorites = getFavorites();
-
-  if (favorites.includes(id)) {
-    favorites = favorites.filter(favId => favId !== id);
-    button.innerHTML = "🤍";
   } else {
-    favorites.push(id);
-    button.innerHTML = "❤️";
-  }
-
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-}
-
-// 🎠 Слайдер
-function initSlider() {
-  const slides = document.querySelectorAll(".slide");
-  let currentSlide = 0;
-
-  if (slides.length > 0) {
-    slides[currentSlide].classList.add("active");
-
-    setInterval(() => {
-      slides[currentSlide].classList.remove("active");
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add("active");
-    }, 5000);
+    app.innerHTML = "<h2>Добро пожаловать в МаксМаркет!</h2>";
   }
 }
-
-// 📤 Экспортируем для catalog.js
-export { renderProductList };
