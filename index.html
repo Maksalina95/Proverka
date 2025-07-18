@@ -13,8 +13,6 @@
   <header>
     <h1 class="logo">МаксМаркет</h1>
     <button id="installApp" class="install-button" style="display:none;">📲 Установить</button>
-
-    <!-- ✅ Кнопка Каталог -->
     <button onclick="showSection('catalog')">Каталог</button>
   </header>
 
@@ -31,14 +29,9 @@
     <div class="slide">📢 Здесь могла бы быть ваша РЕКЛАМА</div>
   </section>
 
-  <!-- ✅ Исправлен двойной main -->
   <main>
-    <h2>Новинки</h2>
-    <ul id="suggestions"></ul>
-
     <div id="app-content">
-      <div id="productList" class="product-list"></div>
-
+      <!-- Секция Каталога -->
       <section id="catalog" style="display: none;">
         <h2>Выберите категорию</h2>
         <div id="categoryList" class="product-list"></div>
@@ -48,19 +41,22 @@
 
         <h2>Выберите под-подкатегорию</h2>
         <div id="subsubcategoryList" class="product-list"></div>
+
+        <h2>Товары</h2>
+        <div id="productList" class="product-list"></div>
       </section>
     </div>
   </main>
 
   <div class="bottom-icons" role="navigation" aria-label="Основное меню">
-    <a href="#каталог" aria-label="Каталог">🛒<span class="tooltip">Каталог</span></a>
-    <a href="#контакты" aria-label="Контакты">📞<span class="tooltip">Контакты</span></a>
-    <a href="#доставка" aria-label="Доставка">🚖<span class="tooltip">Доставка</span></a>
-    <a href="#избранное" aria-label="Избранное">❤️<span class="tooltip">Избранное</span></a>
-    <a href="#адрес" aria-label="Адрес">📍<span class="tooltip">Адрес</span></a>
-    <a href="#условия" aria-label="Условия">📝<span class="tooltip">Условия</span></a>
-    <a href="#отзывы" aria-label="Отзывы">🏆<span class="tooltip">Отзывы</span></a>
-    <a href="#" aria-label="Обновить страницу">🔄<span class="tooltip">Обновить</span></a>
+    <a href="#" onclick="showSection('catalog')">🛒<span class="tooltip">Каталог</span></a>
+    <a href="#контакты">📞<span class="tooltip">Контакты</span></a>
+    <a href="#доставка">🚖<span class="tooltip">Доставка</span></a>
+    <a href="#избранное">❤️<span class="tooltip">Избранное</span></a>
+    <a href="#адрес">📍<span class="tooltip">Адрес</span></a>
+    <a href="#условия">📝<span class="tooltip">Условия</span></a>
+    <a href="#отзывы">🏆<span class="tooltip">Отзывы</span></a>
+    <a href="#" onclick="location.reload()">🔄<span class="tooltip">Обновить</span></a>
   </div>
 
   <script>
@@ -90,7 +86,7 @@
       window.dispatchEvent(event);
     }
 
-    // ✅ Установка PWA
+    // Установка PWA
     let deferredPrompt;
     const installBtn = document.getElementById('installApp');
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -101,36 +97,13 @@
     installBtn.addEventListener('click', () => {
       if (deferredPrompt) {
         deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
+        deferredPrompt.userChoice.then(() => {
           deferredPrompt = null;
         });
       }
     });
 
-    // ✅ Хеш-маршрутизация SPA
-    function loadPageFromHash() {
-      const hash = location.hash.replace('#', '');
-      const container = document.getElementById('app-content');
-
-      if (!hash) {
-        container.innerHTML = '<div id="productList" class="product-list"></div>';
-        return;
-      }
-
-      fetch(`${hash}.html`)
-        .then(res => res.ok ? res.text() : '<p>Страница не найдена</p>')
-        .then(html => {
-          container.innerHTML = html;
-        })
-        .catch(() => {
-          container.innerHTML = '<p>Ошибка загрузки</p>';
-        });
-    }
-
-    window.addEventListener('hashchange', loadPageFromHash);
-    window.addEventListener('DOMContentLoaded', loadPageFromHash);
-
-    // ✅ Показ нужной секции
+    // Переключение секций
     function showSection(id) {
       const sections = document.querySelectorAll('section');
       sections.forEach(section => {
