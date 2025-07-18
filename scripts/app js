@@ -3,26 +3,10 @@ import { baseUrl } from './config.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   loadProducts(); // 🌟 Загружаем начальный список продуктов
-  loadPage();     // 🧭 Загружаем страницу по текущему хешу
-
-  // 🎠 Автослайдер внутри DOMContentLoaded
-  const slides = document.querySelectorAll(".slide");
-  let currentSlide = 0;
-
-  if (slides.length > 0) {
-    slides[currentSlide].classList.add("active");
-
-    setInterval(() => {
-      slides[currentSlide].classList.remove("active");
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add("active");
-    }, 5000);
-  }
+  initSlider();   // 🎠 Запускаем слайдер
 });
 
-window.addEventListener("hashchange", loadPage);
-
-// 🌸 Загрузка списка товаров (основной каталог)
+// 🌸 Загрузка всех товаров (на главной)
 function loadProducts() {
   fetch(`${baseUrl}`)
     .then(res => res.json())
@@ -30,54 +14,39 @@ function loadProducts() {
       const container = document.getElementById("productList");
       if (!container) return;
 
-      container.innerHTML = ""; // Очищаем перед загрузкой
+      container.innerHTML = "";
       const items = data.reverse();
 
-      items.forEach(p => {
-        const card = document.createElement("div");
-        card.className = "product-card";
-
-        const isFavorite = getFavorites().includes(p.id);
-
-        card.innerHTML = `
-          <img src="${p.фото}" alt="${p.название}">
-          <h3>${p.название}</h3>
-          <p>${p.описание || ""}</p>
-          <p><strong>${p.цена} ₽</strong></p>
-          <a href="https://wa.me/798376280080" target="_blank">WhatsApp</a>
-        `;
-
-        const favBtn = document.createElement("button");
-        favBtn.className = "fav-btn";
-        favBtn.innerHTML = isFavorite ? "❤️" : "🤍";
-        favBtn.onclick = () => toggleFavorite(p.id, favBtn);
-
-        card.appendChild(favBtn);
-        container.appendChild(card);
-      });
+      renderProductList(items, container);
     });
 }
 
-// 📄 SPA-хеш-маршрутизация
-function loadPage() {
-  const page = location.hash.substring(1) || 'главная';
-  const container = document.getElementById("app-content");
+// 🔄 Рендер товаров
+function renderProductList(items, container) {
+  container.innerHTML = "";
 
-  if (page === "главная") {
-    container.innerHTML = '<div id="productList" class="product-list"></div>';
-    loadProducts();
-    return;
-  }
+  items.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "product-card";
 
-  fetch(`${page}.html`)
-    .then(res => res.ok ? res.text() : '<p>Страница не найдена</p>')
-    .then(html => {
-      container.innerHTML = html;
-      window.scrollTo(0, 0);
-    })
-    .catch(() => {
-      container.innerHTML = "<p>Ошибка загрузки страницы</p>";
-    });
+    const isFavorite = getFavorites().includes(p.id);
+
+    card.innerHTML = `
+      <img src="${p.фото}" alt="${p.название}">
+      <h3>${p.название}</h3>
+      <p>${p.описание || ""}</p>
+      <p><strong>${p.цена} ₽</strong></p>
+      <a href="https://wa.me/798376280080" target="_blank">WhatsApp</a>
+    `;
+
+    const favBtn = document.createElement("button");
+    favBtn.className = "fav-btn";
+    favBtn.innerHTML = isFavorite ? "❤️" : "🤍";
+    favBtn.onclick = () => toggleFavorite(p.id, favBtn);
+
+    card.appendChild(favBtn);
+    container.appendChild(card);
+  });
 }
 
 // 💖 Избранное
@@ -98,3 +67,22 @@ function toggleFavorite(id, button) {
 
   localStorage.setItem("favorites", JSON.stringify(favorites));
 }
+
+// 🎠 Слайдер
+function initSlider() {
+  const slides = document.querySelectorAll(".slide");
+  let currentSlide = 0;
+
+  if (slides.length > 0) {
+    slides[currentSlide].classList.add("active");
+
+    setInterval(() => {
+      slides[currentSlide].classList.remove("active");
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add("active");
+    }, 5000);
+  }
+}
+
+// 📤 Экспортируем для catalog.js
+export { renderProductList };
