@@ -13,6 +13,9 @@
   <header>
     <h1 class="logo">МаксМаркет</h1>
     <button id="installApp" class="install-button" style="display:none;">📲 Установить</button>
+
+    <!-- ✅ Кнопка Каталог -->
+    <button onclick="showSection('catalog')">Каталог</button>
   </header>
 
   <div class="search-bar">
@@ -28,28 +31,25 @@
     <div class="slide">📢 Здесь могла бы быть ваша РЕКЛАМА</div>
   </section>
 
+  <!-- ✅ Исправлен двойной main -->
   <main>
-  <main>
-  <h2>Новинки</h2>
-  <ul id="suggestions"></ul>
+    <h2>Новинки</h2>
+    <ul id="suggestions"></ul>
 
-  <!-- ✅ Контейнер для подгрузки страниц SPA -->
-  <div id="app-content">
-    <!-- Здесь будут подгружаться страницы -->
-    <div id="productList" class="product-list"></div>
+    <div id="app-content">
+      <div id="productList" class="product-list"></div>
 
-    <!-- ✅ Каталог со всеми уровнями -->
-    <section id="catalog" style="display: none;">
-      <h2>Выберите категорию</h2>
-      <div id="categoryList" class="product-list"></div>
+      <section id="catalog" style="display: none;">
+        <h2>Выберите категорию</h2>
+        <div id="categoryList" class="product-list"></div>
 
-      <h2>Выберите подкатегорию</h2>
-      <div id="subcategoryList" class="product-list"></div>
+        <h2>Выберите подкатегорию</h2>
+        <div id="subcategoryList" class="product-list"></div>
 
-      <h2>Выберите под-подкатегорию</h2>
-      <div id="subsubcategoryList" class="product-list"></div>
-    </section>
-  </div>
+        <h2>Выберите под-подкатегорию</h2>
+        <div id="subsubcategoryList" class="product-list"></div>
+      </section>
+    </div>
   </main>
 
   <div class="bottom-icons" role="navigation" aria-label="Основное меню">
@@ -107,18 +107,16 @@
       }
     });
 
-    // ✅ Хеш-маршрутизация SPA (оставил, но рекомендую использовать из app.js)
+    // ✅ Хеш-маршрутизация SPA
     function loadPageFromHash() {
       const hash = location.hash.replace('#', '');
       const container = document.getElementById('app-content');
 
       if (!hash) {
-        // Показываем товары по умолчанию
         container.innerHTML = '<div id="productList" class="product-list"></div>';
         return;
       }
 
-      // Загружаем соответствующий HTML-файл
       fetch(`${hash}.html`)
         .then(res => res.ok ? res.text() : '<p>Страница не найдена</p>')
         .then(html => {
@@ -131,14 +129,17 @@
 
     window.addEventListener('hashchange', loadPageFromHash);
     window.addEventListener('DOMContentLoaded', loadPageFromHash);
-  </script>
-<script src="scripts/catalog.js"></script>
 
-  <!--
-    ⚠️ Главное изменение здесь: подключаем только app.js с type="module"!
-    Это позволит использовать import из config.js внутри app.js.
-    При этом config.js НЕ подключаем отдельно в index.html.
-  -->
+    // ✅ Показ нужной секции
+    function showSection(id) {
+      const sections = document.querySelectorAll('section');
+      sections.forEach(section => {
+        section.style.display = (section.id === id) ? 'block' : 'none';
+      });
+    }
+  </script>
+
+  <script src="scripts/catalog.js"></script>
   <script type="module" src="scripts/app.js"></script>
 </body>
 </html>
