@@ -1,6 +1,9 @@
+import { baseUrl } from './config.js';
+import { renderProductList } from './app.js';
+
 document.addEventListener('DOMContentLoaded', async () => {
   const container = document.getElementById("categoryList");
-  if (!container) return; // Защита, если элемент не найден
+  if (!container) return;
 
   try {
     const res = await fetch(`${baseUrl}/товары`);
@@ -44,7 +47,7 @@ function showSubcategories(category) {
     });
 }
 
-function showSubsubcategories(category, subcategory) {
+window.showSubsubcategories = function (category, subcategory) {
   fetch(`${baseUrl}/товары`)
     .then(r => r.json())
     .then(data => {
@@ -63,7 +66,7 @@ function showSubsubcategories(category, subcategory) {
     });
 }
 
-function showProducts(category, subcategory, subsubcategory) {
+window.showProducts = function (category, subcategory, subsubcategory) {
   fetch(`${baseUrl}/товары`)
     .then(r => r.json())
     .then(data => {
@@ -73,6 +76,7 @@ function showProducts(category, subcategory, subsubcategory) {
         (p.подподкатегория === subsubcategory || !p.подподкатегория)
       );
 
-      renderProductList(filtered, document.getElementById('productList'));
+      const container = document.getElementById('productList');
+      if (container) renderProductList(filtered, container);
     });
 }
