@@ -7,35 +7,12 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icons/icon-192.png" type="image/png" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lobster&display=swap" rel="stylesheet" />
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      overscroll-behavior: none;
-      scroll-behavior: smooth;
-      font-family: 'Poppins', sans-serif;
-      background-color: #fff0f6;
-      color: #4B004B;
-    }
-
-    /* Стили оставлены без изменений */
-    ...
-    /* Весь CSS у тебя уже есть — я не убираю */
-  </style>
 </head>
 <body>
   <header>
     <h1 class="logo">МаксМаркет</h1>
     <button id="installApp" class="install-button" style="display:none;">📲 Установить</button>
   </header>
-
-  <div class="full-panel" id="panel">
-    <button class="close-panel" onclick="closePanel()">✖</button>
-    <h2 id="panelTitle"></h2>
-    <div id="panelContent">Загрузка...</div>
-  </div>
 
   <div class="search-bar">
     <form class="search-form" onsubmit="return false;">
@@ -50,49 +27,29 @@
     <div class="slide">📢 Здесь могла бы быть ваша РЕКЛАМА</div>
   </section>
 
-  <!-- ✅ ЗАМЕНЁННЫЙ main -->
   <main>
     <h2>Новинки</h2>
     <ul id="suggestions"></ul>
 
-    <!-- 🧠 Контейнер для контента страниц SPA -->
-    <div id="spa-content">
-      <!-- По умолчанию отобразим список продуктов -->
+    <!-- ✅ Контейнер для подгрузки страниц SPA -->
+    <div id="app-content">
+      <!-- Здесь будут подгружаться страницы -->
       <div id="productList" class="product-list"></div>
     </div>
   </main>
 
   <div class="bottom-icons" role="navigation" aria-label="Основное меню">
-    <button onclick="openPanel('Каталог', 'catalog.html')" aria-label="Каталог">🛒<span class="tooltip">Каталог</span></button>
-    <button onclick="openPanel('Контакты', 'contacts.html')" aria-label="Контакты">📞<span class="tooltip">Контакты</span></button>
-    <button onclick="openPanel('Доставка', 'delivery.html')" aria-label="Доставка">🚖<span class="tooltip">Доставка</span></button>
-    <button onclick="openPanel('Избранное', 'favorites.html')" aria-label="Избранное">❤️<span class="tooltip">Избранное</span></button>
-    <button onclick="openPanel('Адрес', 'adress.html')" aria-label="Адрес">📍<span class="tooltip">Адрес</span></button>
-    <button onclick="openPanel('Условия', 'rules.html')" aria-label="Условия">📝<span class="tooltip">Условия</span></button>
-    <button onclick="openPanel('Отзывы', 'reviews.html')" aria-label="Отзывы">🏆<span class="tooltip">Отзывы</span></button>
-    <button onclick="location.reload()" aria-label="Обновить страницу">🔄<span class="tooltip">Обновить</span></button>
+    <a href="#каталог" aria-label="Каталог">🛒<span class="tooltip">Каталог</span></a>
+    <a href="#контакты" aria-label="Контакты">📞<span class="tooltip">Контакты</span></a>
+    <a href="#доставка" aria-label="Доставка">🚖<span class="tooltip">Доставка</span></a>
+    <a href="#избранное" aria-label="Избранное">❤️<span class="tooltip">Избранное</span></a>
+    <a href="#адрес" aria-label="Адрес">📍<span class="tooltip">Адрес</span></a>
+    <a href="#условия" aria-label="Условия">📝<span class="tooltip">Условия</span></a>
+    <a href="#отзывы" aria-label="Отзывы">🏆<span class="tooltip">Отзывы</span></a>
+    <a href="#" aria-label="Обновить страницу">🔄<span class="tooltip">Обновить</span></a>
   </div>
 
   <script>
-    function openPanel(title, url) {
-      document.getElementById('panelTitle').innerText = title;
-      const content = document.getElementById('panelContent');
-      content.innerHTML = 'Загрузка...';
-      fetch(url)
-        .then(response => response.text())
-        .then(html => {
-          content.innerHTML = html;
-        })
-        .catch(() => {
-          content.innerHTML = '<p>Ошибка загрузки.</p>';
-        });
-      document.getElementById('panel').classList.add('active');
-    }
-
-    function closePanel() {
-      document.getElementById('panel').classList.remove('active');
-    }
-
     const input = document.getElementById("searchInput");
     const clearBtn = document.getElementById("clearSearch");
     const searchBtn = document.getElementById("applySearchBtn");
@@ -119,31 +76,51 @@
       window.dispatchEvent(event);
     }
 
+    // ✅ Установка PWA
     let deferredPrompt;
     const installBtn = document.getElementById('installApp');
-
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
       installBtn.style.display = 'inline-block';
     });
-
     installBtn.addEventListener('click', () => {
       if (deferredPrompt) {
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted install');
-          } else {
-            console.log('User dismissed install');
-          }
           deferredPrompt = null;
         });
       }
     });
+
+    // ✅ Хеш-маршрутизация SPA
+    function loadPageFromHash() {
+      const hash = location.hash.replace('#', '');
+      const container = document.getElementById('app-content');
+
+      if (!hash) {
+        // Показываем товары по умолчанию
+        container.innerHTML = '<div id="productList" class="product-list"></div>';
+        return;
+      }
+
+      // Загружаем соответствующий HTML-файл
+      fetch(`${hash}.html`)
+        .then(res => res.ok ? res.text() : '<p>Страница не найдена</p>')
+        .then(html => {
+          container.innerHTML = html;
+        })
+        .catch(() => {
+          container.innerHTML = '<p>Ошибка загрузки</p>';
+        });
+    }
+
+    // Загрузка при открытии и при переходе
+    window.addEventListener('hashchange', loadPageFromHash);
+    window.addEventListener('DOMContentLoaded', loadPageFromHash);
   </script>
 
-  <!-- ✅ ДОБАВЛЕННЫЕ СКРИПТЫ ДЛЯ SPA -->
+  <!-- ✅ Скрипты -->
   <script src="scripts/app.js" defer></script>
   <script src="scripts/config.js" defer></script>
 </body>
