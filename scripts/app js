@@ -4,6 +4,20 @@ import { baseUrl } from './config.js';
 document.addEventListener("DOMContentLoaded", () => {
   loadProducts(); // 🌟 Загружаем начальный список продуктов
   loadPage();     // 🧭 Загружаем страницу по текущему хешу
+
+  // 🎠 Автослайдер внутри DOMContentLoaded
+  const slides = document.querySelectorAll(".slide");
+  let currentSlide = 0;
+
+  if (slides.length > 0) {
+    slides[currentSlide].classList.add("active");
+
+    setInterval(() => {
+      slides[currentSlide].classList.remove("active");
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add("active");
+    }, 5000);
+  }
 });
 
 window.addEventListener("hashchange", loadPage);
@@ -46,10 +60,9 @@ function loadProducts() {
 
 // 📄 SPA-хеш-маршрутизация
 function loadPage() {
-  const page = location.hash.substring(1) || 'главная'; // Например, #контакты → контакты.html
+  const page = location.hash.substring(1) || 'главная';
   const container = document.getElementById("app-content");
 
-  // Если это главная страница — показываем productList
   if (page === "главная") {
     container.innerHTML = '<div id="productList" class="product-list"></div>';
     loadProducts();
@@ -84,18 +97,4 @@ function toggleFavorite(id, button) {
   }
 
   localStorage.setItem("favorites", JSON.stringify(favorites));
-}
-
-// 🎠 Автослайдер
-const slides = document.querySelectorAll(".slide");
-let currentSlide = 0;
-
-if (slides.length > 0) {
-  slides[currentSlide].classList.add("active");
-
-  setInterval(() => {
-    slides[currentSlide].classList.remove("active");
-    currentSlide = (currentSlide + 1) % slides.length;
-    slides[currentSlide].classList.add("active");
-  }, 5000);
 }
