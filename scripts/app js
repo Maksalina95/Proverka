@@ -1,9 +1,10 @@
+// scripts/app.js
 import { baseUrl } from './config.js';
 import { loadCatalog } from './catalog.js';
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadPage();
-  window.addEventListener("hashchange", loadPage);
+  loadPage(); // Загружаем страницу при старте
+  window.addEventListener("hashchange", loadPage); // Обрабатываем изменение хэша
 });
 
 function loadPage() {
@@ -17,7 +18,11 @@ function loadPage() {
   } else if (hash === "contacts") {
     app.innerHTML = `
       <h2>Контакты</h2>
-      <p>Напишите нам в WhatsApp: <a href="https://wa.me/79999999999">+7 999 999-99-99</a></p>
+      <p>Напишите нам в WhatsApp: 
+        <a href="https://wa.me/79999999999" target="_blank">
+          +7 999 999-99-99
+        </a>
+      </p>
     `;
   } else {
     app.innerHTML = "<h2>Добро пожаловать в МаксМаркет!</h2>";
