@@ -1,25 +1,16 @@
-const baseUrl = "https://opensheet.elk.sh/1uvZDDq7y3D73InwHYQ4vKqmhHXGtK9KjdRcVXzm5KAk";
+// Импортируем baseUrl из config.js
+import { baseUrl } from './config.js';
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 🌟 Загружаем начальный список продуктов
-  loadProducts();
-
-  // 🧭 Навигация по кнопкам (внизу страницы)
-  document.querySelectorAll(".bottom-icons button").forEach(button => {
-    const title = button.getAttribute("aria-label");
-    const page = button.getAttribute("onclick")?.match(/'([^']+\.html)'/)?.[1];
-
-    if (page) {
-      button.addEventListener("click", () => {
-        loadPage(title, page);
-      });
-    }
-  });
+  loadProducts(); // 🌟 Загружаем начальный список продуктов
+  loadPage();     // 🧭 Загружаем страницу по текущему хешу
 });
+
+window.addEventListener("hashchange", loadPage);
 
 // 🌸 Загрузка списка товаров (основной каталог)
 function loadProducts() {
-  fetch(`${baseUrl}/Лист1`)
+  fetch(`${baseUrl}`)
     .then(res => res.json())
     .then(data => {
       const container = document.getElementById("productList");
@@ -53,19 +44,26 @@ function loadProducts() {
     });
 }
 
-// 📄 Загрузка HTML-страницы в контейнер SPA
-function loadPage(title, url) {
-  const content = document.getElementById("spa-content");
-  content.innerHTML = "<p>Загрузка...</p>";
+// 📄 SPA-хеш-маршрутизация
+function loadPage() {
+  const page = location.hash.substring(1) || 'главная'; // Например, #контакты → контакты.html
+  const container = document.getElementById("app-content");
 
-  fetch(url)
-    .then(res => res.text())
+  // Если это главная страница — показываем productList
+  if (page === "главная") {
+    container.innerHTML = '<div id="productList" class="product-list"></div>';
+    loadProducts();
+    return;
+  }
+
+  fetch(`${page}.html`)
+    .then(res => res.ok ? res.text() : '<p>Страница не найдена</p>')
     .then(html => {
-      content.innerHTML = html;
-      window.scrollTo(0, 0); // прокручиваем вверх при загрузке
+      container.innerHTML = html;
+      window.scrollTo(0, 0);
     })
     .catch(() => {
-      content.innerHTML = "<p>Ошибка загрузки.</p>";
+      container.innerHTML = "<p>Ошибка загрузки страницы</p>";
     });
 }
 
