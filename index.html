@@ -6,113 +6,26 @@
   <title>МаксМаркет</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icons/icon-192.png" type="image/png" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lobster&display=swap" rel="stylesheet" />
 </head>
 <body>
   <header>
-    <h1 class="logo">МаксМаркет</h1>
-    <button id="installApp" class="install-button" style="display:none;">📲 Установить</button>
-    <button onclick="showSection('catalog')">Каталог</button>
+    <h1>МаксМаркет</h1>
+    <nav>
+      <a href="#home">Главная</a>
+      <a href="#catalog">Каталог</a>
+      <a href="#favorites">Избранное</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
   </header>
 
-  <div class="search-bar">
-    <form class="search-form" onsubmit="return false;">
-      <input type="text" id="searchInput" placeholder="Найти на МаксМаркет" />
-      <span id="clearSearch">✕</span>
-      <button type="submit" id="applySearchBtn">Поиск</button>
-    </form>
-  </div>
-
-  <section class="slider">
-    <div class="slide active">🌸 Добро пожаловать в Магазин Максалины!</div>
-    <div class="slide">📢 Здесь могла бы быть ваша РЕКЛАМА</div>
-  </section>
-
-  <main>
-    <div id="app-content">
-      <!-- Секция Каталога -->
-      <section id="catalog" style="display: none;">
-        <h2>Выберите категорию</h2>
-        <div id="categoryList" class="product-list"></div>
-
-        <h2>Выберите подкатегорию</h2>
-        <div id="subcategoryList" class="product-list"></div>
-
-        <h2>Выберите под-подкатегорию</h2>
-        <div id="subsubcategoryList" class="product-list"></div>
-
-        <h2>Товары</h2>
-        <div id="productList" class="product-list"></div>
-      </section>
-    </div>
+  <main id="app">
+    <!-- Контент будет загружаться сюда -->
   </main>
 
-  <div class="bottom-icons" role="navigation" aria-label="Основное меню">
-    <a href="#" onclick="showSection('catalog')">🛒<span class="tooltip">Каталог</span></a>
-    <a href="#контакты">📞<span class="tooltip">Контакты</span></a>
-    <a href="#доставка">🚖<span class="tooltip">Доставка</span></a>
-    <a href="#избранное">❤️<span class="tooltip">Избранное</span></a>
-    <a href="#адрес">📍<span class="tooltip">Адрес</span></a>
-    <a href="#условия">📝<span class="tooltip">Условия</span></a>
-    <a href="#отзывы">🏆<span class="tooltip">Отзывы</span></a>
-    <a href="#" onclick="location.reload()">🔄<span class="tooltip">Обновить</span></a>
-  </div>
+  <footer>
+    <p>© МаксМаркет 2025</p>
+  </footer>
 
-  <script>
-    const input = document.getElementById("searchInput");
-    const clearBtn = document.getElementById("clearSearch");
-    const searchBtn = document.getElementById("applySearchBtn");
-
-    input.addEventListener("input", () => {
-      clearBtn.style.display = input.value.trim() ? "inline" : "none";
-    });
-
-    clearBtn.addEventListener("click", () => {
-      input.value = "";
-      clearBtn.style.display = "none";
-      document.getElementById("productList").innerHTML = "";
-    });
-
-    searchBtn.addEventListener("click", () => {
-      const query = input.value.trim();
-      if (query !== "") {
-        performSearch(query);
-      }
-    });
-
-    function performSearch(query) {
-      const event = new CustomEvent("search", { detail: query });
-      window.dispatchEvent(event);
-    }
-
-    // Установка PWA
-    let deferredPrompt;
-    const installBtn = document.getElementById('installApp');
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.display = 'inline-block';
-    });
-    installBtn.addEventListener('click', () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          deferredPrompt = null;
-        });
-      }
-    });
-
-    // Переключение секций
-    function showSection(id) {
-      const sections = document.querySelectorAll('section');
-      sections.forEach(section => {
-        section.style.display = (section.id === id) ? 'block' : 'none';
-      });
-    }
-  </script>
-
-  <script src="scripts/catalog.js"></script>
   <script type="module" src="scripts/app.js"></script>
 </body>
 </html>
