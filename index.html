@@ -1,19 +1,90 @@
-<!DOCTYPE html>  
-<html lang="ru">  
-<head>  
-  <meta charset="UTF-8">  
-  <title>МаксМаркет</title>  
-  <meta name="viewport" content="width=device-width, initial-scale=1" />  
-  <link rel="stylesheet" href="style.css">  
-</head>  
-<body>  
-  
-  <!-- Общий заголовок -->  
-  <header>  
-    <h1>МаксМаркет</h1>  
-  </header>  
-  
-  <!-- 🔍 Поисковая строка -->  
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>МаксМаркет</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .search-bar {
+      position: relative;
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff5fa;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 0 8px #f0c1d8;
+    }
+
+    .search-bar input#searchInput {
+      width: 100%;
+      padding: 12px 40px 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .search-bar input:focus {
+      outline: 2px solid #E0218A;
+    }
+
+    .search-bar button#clearSearch,
+    .search-bar button#searchButton {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .search-bar button#clearSearch {
+      right: 40px;
+      display: none;
+    }
+
+    .search-bar button#searchButton {
+      right: 10px;
+    }
+
+    .suggestions {
+      list-style: none;
+      margin: 8px 0 0 0;
+      padding: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      max-height: 150px;
+      overflow-y: auto;
+      display: none;
+      position: absolute;
+      width: calc(100% - 32px);
+      left: 16px;
+      z-index: 10;
+    }
+
+    .suggestions li {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .suggestions li:hover {
+      background-color: #f9e0ec;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Общий заголовок -->
+  <header>
+    <h1>МаксМаркет</h1>
+  </header>
+
+  <!-- 🔍 Поисковая строка -->
   <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Поиск товаров..." />
     <button id="clearSearch">✕</button>
@@ -21,40 +92,41 @@
     <ul id="suggestionsList" class="suggestions"></ul>
   </div>
 
-  <!-- Контент, который будет меняться -->  
-  <div id="content"></div>  
-  
-  <!-- Навигация -->  
-  <nav>  
-    <a href="#" data-page="home" class="active">Главная</a>  
-    <a href="#" data-page="catalog">Каталог</a>  
-  </nav>  
-  
-  <!-- Основной скрипт SPA (в том числе загрузка из Google Таблицы) -->  
-  <script type="module" src="scripts/app.js"></script>  
+  <!-- Контент, который будет меняться -->
+  <div id="content"></div>
 
-  <!-- 🔧 Скрипт поиска с автоподсказками из массива товаров -->
+  <!-- Навигация -->
+  <nav>
+    <a href="#" data-page="home" class="active">Главная</a>
+    <a href="#" data-page="catalog">Каталог</a>
+  </nav>
+
+  <!-- Основной скрипт SPA -->
+  <script type="module" src="scripts/app.js"></script>
+
+  <!-- 🔧 Скрипт поиска с автоподсказками -->
   <script type="module">
     import { products } from './scripts/app.js';
 
     const searchInput = document.getElementById('searchInput');
     const clearSearch = document.getElementById('clearSearch');
+    const searchButton = document.getElementById('searchButton');
     const suggestionsList = document.getElementById('suggestionsList');
 
     let productNames = [];
 
-    // Ждём загрузку данных
     window.addEventListener('DOMContentLoaded', () => {
-      // Получаем список названий из массива products
       if (Array.isArray(products)) {
-        productNames = products.map(p => p.name).filter(Boolean);
+        productNames = products.map(p => p.name || p.название || "").filter(Boolean);
       }
 
       searchInput.addEventListener('input', () => {
         const query = searchInput.value.trim().toLowerCase();
         clearSearch.style.display = query ? 'block' : 'none';
 
-        const filtered = productNames.filter(name => name.toLowerCase().includes(query));
+        const filtered = productNames.filter(name =>
+          name.toLowerCase().includes(query)
+        );
 
         suggestionsList.innerHTML = '';
         if (query && filtered.length) {
@@ -64,7 +136,9 @@
             li.onclick = () => {
               searchInput.value = item;
               suggestionsList.style.display = 'none';
-              // 🔁 Можешь тут вставить фильтрацию товаров по item
+              clearSearch.style.display = 'block';
+              // 👇 Вставь здесь фильтрацию товаров, если хочешь:
+              // filterProductsByName(item);
             };
             suggestionsList.appendChild(li);
           });
@@ -76,11 +150,24 @@
 
       clearSearch.addEventListener('click', () => {
         searchInput.value = '';
-        clearSearch.style.display = 'none';
+        suggestionsList.innerHTML = '';
         suggestionsList.style.display = 'none';
+        clearSearch.style.display = 'none';
         searchInput.focus();
+      });
+
+      searchButton.addEventListener('click', () => {
+        const query = searchInput.value.trim().toLowerCase();
+        // 🔍 Тут можно вставить поиск по товарам
+        alert("Вы ищете: " + query);
+      });
+
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.search-bar')) {
+          suggestionsList.style.display = 'none';
+        }
       });
     });
   </script>
-</body>  
+</body>
 </html>
