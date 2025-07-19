@@ -1,199 +1,28 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Магазин Максалины</title>
-  <link rel="stylesheet" href="style.css" />
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      padding-bottom: 70px;
-    }
-
-    header {
-      background-color: #ff007a;
-      color: white;
-      padding: 15px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    header h1 {
-      font-size: 20px;
-      margin: 0;
-    }
-
-    .search-container {
-      position: relative;
-      margin: 15px;
-    }
-
-    .search-container input {
-      width: 100%;
-      padding: 12px 40px 12px 15px;
-      border: 2px solid #ff007a;
-      border-radius: 25px;
-      font-size: 16px;
-    }
-
-    .search-container .clear-btn {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 18px;
-      color: #ff007a;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
-    .suggestions {
-      margin: 0 15px;
-      background: white;
-      border: 1px solid #ccc;
-      border-top: none;
-      max-height: 200px;
-      overflow-y: auto;
-      border-radius: 0 0 10px 10px;
-    }
-
-    .suggestions div {
-      padding: 10px;
-      cursor: pointer;
-    }
-
-    .suggestions div:hover {
-      background-color: #eee;
-    }
-
-    #product-list {
-      padding: 10px;
-    }
-
-    footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background-color: #fff;
-      border-top: 1px solid #ddd;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 0;
-      box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
-      z-index: 999;
-    }
-
-    footer a {
-      text-decoration: none;
-      color: #ff007a;
-      font-size: 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    footer a i {
-      font-size: 20px;
-      margin-bottom: 3px;
-    }
-  </style>
-
-  <script src="https://kit.fontawesome.com/a2e0e6f91b.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <title>МаксМаркет</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+  <!-- Общий заголовок -->
   <header>
     <h1>МаксМаркет</h1>
   </header>
 
-  <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Поиск..." />
-    <button class="clear-btn" onclick="clearSearch()">✖</button>
-    <div class="suggestions" id="suggestions"></div>
-  </div>
+  <!-- Контент, который будет меняться -->
+  <div id="content"></div>
 
-  <div id="product-list"></div>
+  <!-- Навигация -->
+  <nav>
+    <a href="#" data-page="home" class="active">Главная</a>
+    <a href="#" data-page="catalog">Каталог</a>
+  </nav>
 
-  <footer>
-    <a href="#"><i class="fas fa-home"></i><span>Главная</span></a>
-    <a href="#"><i class="fas fa-star"></i><span>Избранное</span></a>
-    <a href="#"><i class="fas fa-search"></i><span>Поиск</span></a>
-    <a href="#"><i class="fas fa-user"></i><span>Профиль</span></a>
-  </footer>
-
-  <script src="скрипты/config.js"></script>
-  <script src="скрипты/catalog.js"></script>
-
-  <script>
-    const input = document.getElementById('searchInput');
-    const suggestions = document.getElementById('suggestions');
-
-    function clearSearch() {
-      input.value = '';
-      suggestions.innerHTML = '';
-      filterProducts('');
-    }
-
-    input.addEventListener('input', () => {
-      const value = input.value.toLowerCase();
-      if (value === '') {
-        suggestions.innerHTML = '';
-        filterProducts('');
-        return;
-      }
-
-      const matches = window.products
-        .filter(p =>
-          (p.name && p.name.toLowerCase().includes(value)) ||
-          (p.description && p.description.toLowerCase().includes(value)) ||
-          (p.category && p.category.toLowerCase().includes(value)) ||
-          (p.subcategory && p.subcategory.toLowerCase().includes(value))
-        )
-        .slice(0, 10);
-
-      suggestions.innerHTML = matches.map(p => `<div onclick="selectSuggestion('${p.name.replace(/'/g, "\\'")}')">${p.name}</div>`).join('');
-      filterProducts(value);
-    });
-
-    function selectSuggestion(name) {
-      input.value = name;
-      suggestions.innerHTML = '';
-      filterProducts(name);
-    }
-
-    function filterProducts(value) {
-      const filtered = window.products.filter(p =>
-        (p.name && p.name.toLowerCase().includes(value.toLowerCase())) ||
-        (p.description && p.description.toLowerCase().includes(value.toLowerCase())) ||
-        (p.category && p.category.toLowerCase().includes(value.toLowerCase())) ||
-        (p.subcategory && p.subcategory.toLowerCase().includes(value.toLowerCase()))
-      );
-      renderProducts(filtered);
-    }
-
-    function renderProducts(products) {
-      const container = document.getElementById('product-list');
-      container.innerHTML = products.map(p => `
-        <div style="margin-bottom: 20px;">
-          <img src="${p.photo}" alt="${p.name}" style="max-width: 100%; border-radius: 12px;" />
-          <h3>${p.name}</h3>
-          <p>${p.price}</p>
-          <p>${p.description || ''}</p>
-        </div>
-      `).join('');
-    }
-
-    // Когда каталог загрузится, отрендерим всё
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.products) renderProducts(window.products);
-    });
-  </script>
-
+  <!-- Основной скрипт SPA -->
+  <script type="module" src="scripts/app.js"></script>
 </body>
 </html>
