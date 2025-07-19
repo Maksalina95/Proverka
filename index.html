@@ -8,27 +8,35 @@
   <link rel="manifest" href="manifest.json" />
 </head>
 <body>
-
   <header>
     <h1>МаксМаркет</h1>
     <nav>
-      <a href="#">Главная</a>
-      <a href="#каталог">Каталог</a>
-      <a href="#контакты">Контакты</a>
-      <a href="#избранное">Избранное</a>
+      <a href="#home">Главная</a>
+      <a href="#catalog">Каталог</a>
+      <a href="#contacts">Контакты</a>
     </nav>
   </header>
 
   <main id="app">
-    <!-- Контент будет подгружаться сюда -->
+    <!-- Сюда будет подгружаться содержимое страниц -->
     <p>Загрузка...</p>
   </main>
 
   <footer>
-    <p>© МаксМаркет</p>
+    <p>© 2025 МаксМаркет</p>
   </footer>
 
-  <script type="module" src="./scripts/config.js"></script>
-  <script type="module" src="./scripts/catalog.js"></script>
+  <!-- Скрипты -->
+  <script type="module" src="scripts/config.js"></script>
+  <script type="module" src="scripts/app.js"></script>
+
+  <!-- Регистрация сервис-воркера -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log("✅ Сервис-воркер зарегистрирован"))
+        .catch(error => console.error("❌ Ошибка при регистрации сервис-воркера:", error));
+    }
+  </script>
 </body>
 </html>
