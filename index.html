@@ -1,223 +1,86 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>МаксМаркет</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding-bottom: 60px;
-    }
+<!DOCTYPE html>  
+<html lang="ru">  
+<head>  
+  <meta charset="UTF-8">  
+  <title>МаксМаркет</title>  
+  <meta name="viewport" content="width=device-width, initial-scale=1" />  
+  <link rel="stylesheet" href="style.css">  
+</head>  
+<body>  
+  
+  <!-- Общий заголовок -->  
+  <header>  
+    <h1>МаксМаркет</h1>  
+  </header>  
+  
+  <!-- 🔍 Поисковая строка -->  
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Поиск товаров..." />
+    <button id="clearSearch">✕</button>
+    <button id="searchButton">🔍</button>
+    <ul id="suggestionsList" class="suggestions"></ul>
+  </div>
 
-    header {
-      background: #f8f8f8;
-      padding: 10px 20px;
-      text-align: center;
-      border-bottom: 1px solid #ddd;
-    }
+  <!-- Контент, который будет меняться -->  
+  <div id="content"></div>  
+  
+  <!-- Навигация -->  
+  <nav>  
+    <a href="#" data-page="home" class="active">Главная</a>  
+    <a href="#" data-page="catalog">Каталог</a>  
+  </nav>  
+  
+  <!-- Основной скрипт SPA (в том числе загрузка из Google Таблицы) -->  
+  <script type="module" src="scripts/app.js"></script>  
 
-    #content {
-      padding: 20px;
-    }
+  <!-- 🔧 Скрипт поиска с автоподсказками из массива товаров -->
+  <script type="module">
+    import { products } from './scripts/app.js';
 
-    .product img {
-      width: 100%;
-      max-height: 200px;
-      object-fit: cover;
-    }
+    const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
+    const suggestionsList = document.getElementById('suggestionsList');
 
-    .product, .category {
-      border-bottom: 1px solid #ddd;
-      margin-bottom: 15px;
-      padding-bottom: 10px;
-    }
+    let productNames = [];
 
-    nav {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #eee;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      border-top: 1px solid #ccc;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
-    }
-
-    nav a.active {
-      color: #007bff;
-    }
-
-    .subcategory-btn {
-      display: block;
-      background: #f0f0f0;
-      border: 1px solid #bbb;
-      padding: 10px;
-      margin-bottom: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    /* Поиск */
-    .search-container {
-      position: relative;
-      margin: 10px auto;
-      max-width: 400px;
-    }
-
-    .search-container input {
-      width: 100%;
-      padding: 10px 35px 10px 10px;
-      border-radius: 20px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-
-    .search-container .clear-btn {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      display: none;
-    }
-
-    .autocomplete {
-      position: absolute;
-      background: white;
-      border: 1px solid #ccc;
-      border-top: none;
-      width: 100%;
-      max-height: 150px;
-      overflow-y: auto;
-      z-index: 10;
-    }
-
-    .autocomplete div {
-      padding: 10px;
-      cursor: pointer;
-    }
-
-    .autocomplete div:hover {
-      background-color: #f0f0f0;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>МаксМаркет</h1>
-
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="Поиск товаров...">
-      <button class="clear-btn" id="clearSearch">&times;</button>
-      <div class="autocomplete" id="autocomplete-list"></div>
-    </div>
-  </header>
-
-  <div id="content">Загрузка товаров...</div>
-
-  <nav>
-    <a href="#" data-page="home" class="active">Главная</a>
-    <a href="#" data-page="catalog">Каталог</a>
-  </nav>
-
-  <script>
-    const SHEET_ID = "1uvZDDq7y3D73InwHYQ4vKqmhHXGtK9KjdRcVXzm5KAk";
-    const SHEET_NAME = "Товары";
-    const API_KEY = "AIzaSyDxE9C-b4yRR2wocNzXf3_TxbyW4D8uPlk";
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
-
-    let products = [];
-
-    const contentEl = document.getElementById("content");
-    const searchInput = document.getElementById("searchInput");
-    const clearBtn = document.getElementById("clearSearch");
-    const autocompleteList = document.getElementById("autocomplete-list");
-
-    function renderProducts(list) {
-      contentEl.innerHTML = "";
-      if (list.length === 0) {
-        contentEl.innerHTML = "<p>Ничего не найдено.</p>";
-        return;
+    // Ждём загрузку данных
+    window.addEventListener('DOMContentLoaded', () => {
+      // Получаем список названий из массива products
+      if (Array.isArray(products)) {
+        productNames = products.map(p => p.name).filter(Boolean);
       }
 
-      list.forEach(product => {
-        const div = document.createElement("div");
-        div.className = "product";
-        div.innerHTML = `
-          <h3>${product[1]}</h3>
-          <img src="${product[0]}" alt="${product[1]}">
-          <p>${product[2]}</p>
-          <p><strong>${product[3]} ₽</strong></p>
-        `;
-        contentEl.appendChild(div);
+      searchInput.addEventListener('input', () => {
+        const query = searchInput.value.trim().toLowerCase();
+        clearSearch.style.display = query ? 'block' : 'none';
+
+        const filtered = productNames.filter(name => name.toLowerCase().includes(query));
+
+        suggestionsList.innerHTML = '';
+        if (query && filtered.length) {
+          filtered.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            li.onclick = () => {
+              searchInput.value = item;
+              suggestionsList.style.display = 'none';
+              // 🔁 Можешь тут вставить фильтрацию товаров по item
+            };
+            suggestionsList.appendChild(li);
+          });
+          suggestionsList.style.display = 'block';
+        } else {
+          suggestionsList.style.display = 'none';
+        }
       });
-    }
 
-    function filterProducts(query) {
-      return products.filter(product =>
-        product[1].toLowerCase().includes(query.toLowerCase())
-      );
-    }
-
-    function updateAutocomplete(query) {
-      autocompleteList.innerHTML = "";
-      if (!query) return;
-
-      const suggestions = [...new Set(
-        products
-          .filter(p => p[1].toLowerCase().includes(query.toLowerCase()))
-          .map(p => p[1])
-      )].slice(0, 8); // максимум 8 подсказок
-
-      suggestions.forEach(name => {
-        const item = document.createElement("div");
-        item.textContent = name;
-        item.onclick = () => {
-          searchInput.value = name;
-          autocompleteList.innerHTML = "";
-          renderProducts(filterProducts(name));
-          clearBtn.style.display = "block";
-        };
-        autocompleteList.appendChild(item);
+      clearSearch.addEventListener('click', () => {
+        searchInput.value = '';
+        clearSearch.style.display = 'none';
+        suggestionsList.style.display = 'none';
+        searchInput.focus();
       });
-    }
-
-    searchInput.addEventListener("input", () => {
-      const query = searchInput.value.trim();
-      clearBtn.style.display = query ? "block" : "none";
-      updateAutocomplete(query);
-      if (query === "") renderProducts(products);
     });
-
-    clearBtn.addEventListener("click", () => {
-      searchInput.value = "";
-      clearBtn.style.display = "none";
-      autocompleteList.innerHTML = "";
-      renderProducts(products);
-    });
-
-    // Загрузка с Google Таблицы
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        products = data.values.slice(1); // пропустить заголовок
-        renderProducts(products);
-      })
-      .catch(err => {
-        contentEl.innerHTML = "Ошибка загрузки товаров.";
-        console.error(err);
-      });
   </script>
-</body>
+</body>  
 </html>
