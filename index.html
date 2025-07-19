@@ -4,30 +4,130 @@
   <meta charset="UTF-8" />
   <title>МаксМаркет</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Подключаем шрифт Lobster для заголовка -->
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>МаксМаркет</h1>
+    <h1 class="logo">МаксМаркет</h1>
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Поиск..." />
-      <span id="clearSearch">×</span>
-      <ul id="searchSuggestions"></ul>
+      <input type="text" id="searchInput" placeholder="Поиск..." autocomplete="off" />
+      <span id="clearSearch" title="Очистить">×</span>
+      <ul id="searchSuggestions" class="suggestions-list"></ul>
     </div>
   </header>
 
+  <!-- Кнопка Назад, появляется при входе в панель -->
+  <button id="backButton" style="display:none; position:fixed; top:10px; left:10px; z-index:10000; font-size:18px; padding:6px 12px; background:#E0218A; color:#fff; border:none; border-radius:6px; cursor:pointer;">
+    ← Назад
+  </button>
+
+  <!-- Слайдер приветствия -->
+  <section class="slider">
+    <div class="slide active">🌸 Добро пожаловать в Магазин Максалины!</div>
+    <div class="slide">📢 Здесь могла бы быть ваша РЕКЛАМА</div>
+  </section>
+
   <div id="content"></div>
 
-  <nav class="bottom-menu">
-    <a href="#" data-page="home" class="active">🏠 Главная</a>
-    <a href="#" data-page="catalog">📦 Каталог</a>
-    <a href="contacts.html">📞 Контакты</a>
-    <a href="#" data-page="favorites">❤️ Избранное</a>
+  <!-- Нижнее меню -->
+  <nav class="bottom-icons" role="navigation" aria-label="Основное меню">
+    <button onclick="openPanel('Каталог', 'catalog.html')" aria-label="Каталог">
+      🛒
+      <span class="tooltip">Каталог</span>
+    </button>
+    <button onclick="openPanel('Контакты', 'contacts.html')" aria-label="Контакты">
+      📞
+      <span class="tooltip">Контакты</span>
+    </button>
+    <button onclick="openPanel('Доставка', 'delivery.html')" aria-label="Доставка">
+      🚖
+      <span class="tooltip">Доставка</span>
+    </button>
+    <button onclick="openPanel('Избранное', 'favorites.html')" aria-label="Избранное">
+      ❤️
+      <span class="tooltip">Избранное</span>
+    </button>
+    <button onclick="openPanel('Адрес', 'adress.html')" aria-label="Адрес">
+      📍
+      <span class="tooltip">Адрес</span>
+    </button>
+    <button onclick="openPanel('Условия', 'rules.html')" aria-label="Условия">
+      📝
+      <span class="tooltip">Условия</span>
+    </button>
+    <button onclick="openPanel('Отзывы', 'reviews.html')" aria-label="Отзывы">
+      🏆
+      <span class="tooltip">Отзывы</span>
+    </button>
+    <button onclick="location.reload()" aria-label="Обновить страницу">
+      🔄
+      <span class="tooltip">Обновить</span>
+    </button>
   </nav>
 
-  <script type="module" src="scripts/app.js"></script>
+  <!-- Панель для открытия страниц -->
+  <div class="full-panel" id="panel" style="display:none;">
+    <button class="close-panel" onclick="closePanel()">✖</button>
+    <h2 id="panelTitle"></h2>
+    <div id="panelContent">Загрузка...</div>
+  </div>
+
   <script>
-    // Простой поиск с автоподсказками
+    // Управление панелью и история переходов для кнопки назад
+    const panel = document.getElementById('panel');
+    const panelTitle = document.getElementById('panelTitle');
+    const panelContent = document.getElementById('panelContent');
+    const backButton = document.getElementById('backButton');
+
+    // История просмотров (URL и заголовок)
+    let historyStack = [];
+
+    function openPanel(title, url) {
+      panelTitle.textContent = title;
+      panelContent.innerHTML = 'Загрузка...';
+      fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          panelContent.innerHTML = html;
+        })
+        .catch(() => {
+          panelContent.innerHTML = '<p>Ошибка загрузки.</p>';
+        });
+      panel.style.display = 'flex';
+
+      // Добавляем в историю, чтобы кнопка "назад" работала
+      historyStack.push({title, url});
+      backButton.style.display = 'inline-block';
+    }
+
+    function closePanel() {
+      panel.style.display = 'none';
+      backButton.style.display = 'none';
+      historyStack = [];
+    }
+
+    backButton.addEventListener('click', () => {
+      if (historyStack.length > 1) {
+        historyStack.pop(); // убираем текущую страницу
+        const last = historyStack[historyStack.length - 1];
+        panelTitle.textContent = last.title;
+        panelContent.innerHTML = 'Загрузка...';
+        fetch(last.url)
+          .then(res => res.text())
+          .then(html => {
+            panelContent.innerHTML = html;
+          })
+          .catch(() => {
+            panelContent.innerHTML = '<p>Ошибка загрузки.</p>';
+          });
+      } else {
+        closePanel();
+      }
+    });
+
+    // Поиск с автоподсказками
     const input = document.getElementById('searchInput');
     const clear = document.getElementById('clearSearch');
     const suggestions = document.getElementById('searchSuggestions');
@@ -61,6 +161,7 @@
     clear.addEventListener('click', () => {
       input.value = '';
       suggestions.innerHTML = '';
+      input.focus();
     });
   </script>
 </body>
