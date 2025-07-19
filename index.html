@@ -1,30 +1,49 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>МаксМаркет</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Добро пожаловать в МаксМаркет</h1>
+    <h1>МаксМаркет</h1>
     <nav>
-      <button onclick="location.hash = ''">🏠 Главная</button>
-      <button onclick="location.hash = 'catalog'">🗂️ Каталог</button>
+      <ul>
+        <li><a href="#home">Главная</a></li>
+        <li><a href="#catalog">Каталог</a></li>
+      </ul>
     </nav>
   </header>
 
-  <main id="main-content">
-    <p>Загрузка...</p>
+  <main>
+    <!-- Главная страница -->
+    <section id="home">
+      <h2>Товары</h2>
+      <div id="products-list">
+        <!-- Товары будут здесь -->
+      </div>
+    </section>
+
+    <!-- Каталог -->
+    <section id="catalog">
+      <h2>Каталог</h2>
+      <div id="categories-list">
+        <!-- Категории будут здесь -->
+      </div>
+    </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 МаксМаркет</p>
+    <nav>
+      <ul>
+        <li><a href="#home">Главная</a></li>
+        <li><a href="#catalog">Каталог</a></li>
+      </ul>
+    </nav>
   </footer>
 
-  <!-- Скрипты -->
-  <script type="module" src="scripts/app.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
