@@ -1,28 +1,75 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>МаксМаркет</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<!DOCTYPE html>  
+<html lang="ru">  
+<head>  
+  <meta charset="UTF-8">  
+  <title>МаксМаркет</title>  
+  <meta name="viewport" content="width=device-width, initial-scale=1" />  
+  <link rel="stylesheet" href="style.css">  
+</head>  
+<body>  
+  
+  <!-- Общий заголовок -->  
+  <header>  
+    <h1>МаксМаркет</h1>  
+  </header>  
+  
+  <!-- 🔍 Поисковая строка -->  
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Поиск товаров..." />
+    <button id="clearSearch">✕</button>
+    <button id="searchButton">🔍</button>
+    <ul id="suggestionsList" class="suggestions"></ul>
+  </div>
 
-  <!-- Общий заголовок -->
-  <header>
-    <h1>МаксМаркет</h1>
-  </header>
+  <!-- Контент, который будет меняться -->  
+  <div id="content"></div>  
+  
+  <!-- Навигация -->  
+  <nav>  
+    <a href="#" data-page="home" class="active">Главная</a>  
+    <a href="#" data-page="catalog">Каталог</a>  
+  </nav>  
+  
+  <!-- Основной скрипт SPA -->  
+  <script type="module" src="scripts/app.js"></script>  
 
-  <!-- Контент, который будет меняться -->
-  <div id="content"></div>
+  <!-- 🔧 Скрипт поиска -->
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
+    const suggestionsList = document.getElementById('suggestionsList');
 
-  <!-- Навигация -->
-  <nav>
-    <a href="#" data-page="home" class="active">Главная</a>
-    <a href="#" data-page="catalog">Каталог</a>
-  </nav>
+    searchInput.addEventListener('input', () => {
+      clearSearch.style.display = searchInput.value ? 'block' : 'none';
 
-  <!-- Основной скрипт SPA -->
-  <script type="module" src="scripts/app.js"></script>
-</body>
+      const query = searchInput.value.toLowerCase();
+      const allSuggestions = ['тарелки', 'чашки', 'ложки', 'кружки', 'чайник'];
+      const filtered = allSuggestions.filter(item => item.includes(query));
+
+      suggestionsList.innerHTML = '';
+      if (query && filtered.length) {
+        filtered.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          li.onclick = () => {
+            searchInput.value = item;
+            suggestionsList.style.display = 'none';
+          };
+          suggestionsList.appendChild(li);
+        });
+        suggestionsList.style.display = 'block';
+      } else {
+        suggestionsList.style.display = 'none';
+      }
+    });
+
+    clearSearch.addEventListener('click', () => {
+      searchInput.value = '';
+      clearSearch.style.display = 'none';
+      suggestionsList.style.display = 'none';
+      searchInput.focus();
+    });
+  </script>
+
+</body>  
 </html>
