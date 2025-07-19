@@ -30,46 +30,57 @@
     <a href="#" data-page="catalog">Каталог</a>  
   </nav>  
   
-  <!-- Основной скрипт SPA -->  
+  <!-- Основной скрипт SPA (в том числе загрузка из Google Таблицы) -->  
   <script type="module" src="scripts/app.js"></script>  
 
-  <!-- 🔧 Скрипт поиска -->
-  <script>
+  <!-- 🔧 Скрипт поиска с автоподсказками из массива товаров -->
+  <script type="module">
+    import { products } from './scripts/app.js';
+
     const searchInput = document.getElementById('searchInput');
     const clearSearch = document.getElementById('clearSearch');
     const suggestionsList = document.getElementById('suggestionsList');
 
-    searchInput.addEventListener('input', () => {
-      clearSearch.style.display = searchInput.value ? 'block' : 'none';
+    let productNames = [];
 
-      const query = searchInput.value.toLowerCase();
-      const allSuggestions = ['тарелки', 'чашки', 'ложки', 'кружки', 'чайник'];
-      const filtered = allSuggestions.filter(item => item.includes(query));
-
-      suggestionsList.innerHTML = '';
-      if (query && filtered.length) {
-        filtered.forEach(item => {
-          const li = document.createElement('li');
-          li.textContent = item;
-          li.onclick = () => {
-            searchInput.value = item;
-            suggestionsList.style.display = 'none';
-          };
-          suggestionsList.appendChild(li);
-        });
-        suggestionsList.style.display = 'block';
-      } else {
-        suggestionsList.style.display = 'none';
+    // Ждём загрузку данных
+    window.addEventListener('DOMContentLoaded', () => {
+      // Получаем список названий из массива products
+      if (Array.isArray(products)) {
+        productNames = products.map(p => p.name).filter(Boolean);
       }
-    });
 
-    clearSearch.addEventListener('click', () => {
-      searchInput.value = '';
-      clearSearch.style.display = 'none';
-      suggestionsList.style.display = 'none';
-      searchInput.focus();
+      searchInput.addEventListener('input', () => {
+        const query = searchInput.value.trim().toLowerCase();
+        clearSearch.style.display = query ? 'block' : 'none';
+
+        const filtered = productNames.filter(name => name.toLowerCase().includes(query));
+
+        suggestionsList.innerHTML = '';
+        if (query && filtered.length) {
+          filtered.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            li.onclick = () => {
+              searchInput.value = item;
+              suggestionsList.style.display = 'none';
+              // 🔁 Можешь тут вставить фильтрацию товаров по item
+            };
+            suggestionsList.appendChild(li);
+          });
+          suggestionsList.style.display = 'block';
+        } else {
+          suggestionsList.style.display = 'none';
+        }
+      });
+
+      clearSearch.addEventListener('click', () => {
+        searchInput.value = '';
+        clearSearch.style.display = 'none';
+        suggestionsList.style.display = 'none';
+        searchInput.focus();
+      });
     });
   </script>
-
 </body>  
 </html>
