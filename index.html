@@ -2,167 +2,198 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>МаксМаркет</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Подключаем шрифт Lobster для заголовка -->
-  <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Магазин Максалины</title>
   <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding-bottom: 70px;
+    }
+
+    header {
+      background-color: #ff007a;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      font-size: 20px;
+      margin: 0;
+    }
+
+    .search-container {
+      position: relative;
+      margin: 15px;
+    }
+
+    .search-container input {
+      width: 100%;
+      padding: 12px 40px 12px 15px;
+      border: 2px solid #ff007a;
+      border-radius: 25px;
+      font-size: 16px;
+    }
+
+    .search-container .clear-btn {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #ff007a;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .suggestions {
+      margin: 0 15px;
+      background: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      max-height: 200px;
+      overflow-y: auto;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .suggestions div {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .suggestions div:hover {
+      background-color: #eee;
+    }
+
+    #product-list {
+      padding: 10px;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
+      z-index: 999;
+    }
+
+    footer a {
+      text-decoration: none;
+      color: #ff007a;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    footer a i {
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+  </style>
+
+  <script src="https://kit.fontawesome.com/a2e0e6f91b.js" crossorigin="anonymous"></script>
 </head>
 <body>
+
   <header>
-    <h1 class="logo">МаксМаркет</h1>
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Поиск..." autocomplete="off" />
-      <span id="clearSearch" title="Очистить">×</span>
-      <ul id="searchSuggestions" class="suggestions-list"></ul>
-    </div>
+    <h1>МаксМаркет</h1>
   </header>
 
-  <!-- Кнопка Назад, появляется при входе в панель -->
-  <button id="backButton" style="display:none; position:fixed; top:10px; left:10px; z-index:10000; font-size:18px; padding:6px 12px; background:#E0218A; color:#fff; border:none; border-radius:6px; cursor:pointer;">
-    ← Назад
-  </button>
-
-  <!-- Слайдер приветствия -->
-  <section class="slider">
-    <div class="slide active">🌸 Добро пожаловать в Магазин Максалины!</div>
-    <div class="slide">📢 Здесь могла бы быть ваша РЕКЛАМА</div>
-  </section>
-
-  <div id="content"></div>
-
-  <!-- Нижнее меню -->
-  <nav class="bottom-icons" role="navigation" aria-label="Основное меню">
-    <button onclick="openPanel('Каталог', 'catalog.html')" aria-label="Каталог">
-      🛒
-      <span class="tooltip">Каталог</span>
-    </button>
-    <button onclick="openPanel('Контакты', 'contacts.html')" aria-label="Контакты">
-      📞
-      <span class="tooltip">Контакты</span>
-    </button>
-    <button onclick="openPanel('Доставка', 'delivery.html')" aria-label="Доставка">
-      🚖
-      <span class="tooltip">Доставка</span>
-    </button>
-    <button onclick="openPanel('Избранное', 'favorites.html')" aria-label="Избранное">
-      ❤️
-      <span class="tooltip">Избранное</span>
-    </button>
-    <button onclick="openPanel('Адрес', 'adress.html')" aria-label="Адрес">
-      📍
-      <span class="tooltip">Адрес</span>
-    </button>
-    <button onclick="openPanel('Условия', 'rules.html')" aria-label="Условия">
-      📝
-      <span class="tooltip">Условия</span>
-    </button>
-    <button onclick="openPanel('Отзывы', 'reviews.html')" aria-label="Отзывы">
-      🏆
-      <span class="tooltip">Отзывы</span>
-    </button>
-    <button onclick="location.reload()" aria-label="Обновить страницу">
-      🔄
-      <span class="tooltip">Обновить</span>
-    </button>
-  </nav>
-
-  <!-- Панель для открытия страниц -->
-  <div class="full-panel" id="panel" style="display:none;">
-    <button class="close-panel" onclick="closePanel()">✖</button>
-    <h2 id="panelTitle"></h2>
-    <div id="panelContent">Загрузка...</div>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Поиск..." />
+    <button class="clear-btn" onclick="clearSearch()">✖</button>
+    <div class="suggestions" id="suggestions"></div>
   </div>
 
+  <div id="product-list"></div>
+
+  <footer>
+    <a href="#"><i class="fas fa-home"></i><span>Главная</span></a>
+    <a href="#"><i class="fas fa-star"></i><span>Избранное</span></a>
+    <a href="#"><i class="fas fa-search"></i><span>Поиск</span></a>
+    <a href="#"><i class="fas fa-user"></i><span>Профиль</span></a>
+  </footer>
+
+  <script src="скрипты/config.js"></script>
+  <script src="скрипты/catalog.js"></script>
+
   <script>
-    // Управление панелью и история переходов для кнопки назад
-    const panel = document.getElementById('panel');
-    const panelTitle = document.getElementById('panelTitle');
-    const panelContent = document.getElementById('panelContent');
-    const backButton = document.getElementById('backButton');
-
-    // История просмотров (URL и заголовок)
-    let historyStack = [];
-
-    function openPanel(title, url) {
-      panelTitle.textContent = title;
-      panelContent.innerHTML = 'Загрузка...';
-      fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          panelContent.innerHTML = html;
-        })
-        .catch(() => {
-          panelContent.innerHTML = '<p>Ошибка загрузки.</p>';
-        });
-      panel.style.display = 'flex';
-
-      // Добавляем в историю, чтобы кнопка "назад" работала
-      historyStack.push({title, url});
-      backButton.style.display = 'inline-block';
-    }
-
-    function closePanel() {
-      panel.style.display = 'none';
-      backButton.style.display = 'none';
-      historyStack = [];
-    }
-
-    backButton.addEventListener('click', () => {
-      if (historyStack.length > 1) {
-        historyStack.pop(); // убираем текущую страницу
-        const last = historyStack[historyStack.length - 1];
-        panelTitle.textContent = last.title;
-        panelContent.innerHTML = 'Загрузка...';
-        fetch(last.url)
-          .then(res => res.text())
-          .then(html => {
-            panelContent.innerHTML = html;
-          })
-          .catch(() => {
-            panelContent.innerHTML = '<p>Ошибка загрузки.</p>';
-          });
-      } else {
-        closePanel();
-      }
-    });
-
-    // Поиск с автоподсказками
     const input = document.getElementById('searchInput');
-    const clear = document.getElementById('clearSearch');
-    const suggestions = document.getElementById('searchSuggestions');
+    const suggestions = document.getElementById('suggestions');
 
-    const data = [
-      'Тарелки', 'Чашки', 'Сковородка', 'Чайник',
-      'Заварник', 'Форма для выпечки', 'Ложки', 'Поднос',
-      'Стакан', 'Кастрюля', 'Фарфор', 'Стекло'
-    ];
-
-    input.addEventListener('input', () => {
-      const value = input.value.trim().toLowerCase();
-      suggestions.innerHTML = '';
-      if (value.length === 0) return;
-
-      const matches = data.filter(item =>
-        item.toLowerCase().includes(value)
-      );
-
-      matches.forEach(match => {
-        const li = document.createElement('li');
-        li.textContent = match;
-        li.addEventListener('click', () => {
-          input.value = match;
-          suggestions.innerHTML = '';
-        });
-        suggestions.appendChild(li);
-      });
-    });
-
-    clear.addEventListener('click', () => {
+    function clearSearch() {
       input.value = '';
       suggestions.innerHTML = '';
-      input.focus();
+      filterProducts('');
+    }
+
+    input.addEventListener('input', () => {
+      const value = input.value.toLowerCase();
+      if (value === '') {
+        suggestions.innerHTML = '';
+        filterProducts('');
+        return;
+      }
+
+      const matches = window.products
+        .filter(p =>
+          (p.name && p.name.toLowerCase().includes(value)) ||
+          (p.description && p.description.toLowerCase().includes(value)) ||
+          (p.category && p.category.toLowerCase().includes(value)) ||
+          (p.subcategory && p.subcategory.toLowerCase().includes(value))
+        )
+        .slice(0, 10);
+
+      suggestions.innerHTML = matches.map(p => `<div onclick="selectSuggestion('${p.name.replace(/'/g, "\\'")}')">${p.name}</div>`).join('');
+      filterProducts(value);
+    });
+
+    function selectSuggestion(name) {
+      input.value = name;
+      suggestions.innerHTML = '';
+      filterProducts(name);
+    }
+
+    function filterProducts(value) {
+      const filtered = window.products.filter(p =>
+        (p.name && p.name.toLowerCase().includes(value.toLowerCase())) ||
+        (p.description && p.description.toLowerCase().includes(value.toLowerCase())) ||
+        (p.category && p.category.toLowerCase().includes(value.toLowerCase())) ||
+        (p.subcategory && p.subcategory.toLowerCase().includes(value.toLowerCase()))
+      );
+      renderProducts(filtered);
+    }
+
+    function renderProducts(products) {
+      const container = document.getElementById('product-list');
+      container.innerHTML = products.map(p => `
+        <div style="margin-bottom: 20px;">
+          <img src="${p.photo}" alt="${p.name}" style="max-width: 100%; border-radius: 12px;" />
+          <h3>${p.name}</h3>
+          <p>${p.price}</p>
+          <p>${p.description || ''}</p>
+        </div>
+      `).join('');
+    }
+
+    // Когда каталог загрузится, отрендерим всё
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.products) renderProducts(window.products);
     });
   </script>
+
 </body>
 </html>
