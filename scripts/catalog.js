@@ -1,24 +1,35 @@
 import { baseUrl } from './config.js';
 
-export function loadCatalog() {
-  const app = document.getElementById("app");
-  app.innerHTML = "<h2>Каталог</h2><div class='product-list' id='productList'></div>";
+document.addEventListener("DOMContentLoaded", async () => {
+  const categoryContainer = document.getElementById("category-list");
+  const productsContainer = document.getElementById("products");
 
-  fetch(baseUrl)
-    .then(res => res.json())
-    .then(data => {
-      const list = document.getElementById("productList");
-      data.forEach(item => {
-        if (item.photo) {
-          const card = document.createElement("div");
-          card.className = "product-card";
-          card.innerHTML = `
-            <img src="${item.photo}" alt="${item.name}" />
-            <h3>${item.name}</h3>
-            <p>${item.price} ₽</p>
-          `;
-          list.appendChild(card);
-        }
-      });
+  const data = await fetch(baseUrl).then(res => res.json());
+
+  const hash = decodeURIComponent(location.hash.slice(1));
+
+  if (!hash) {
+    // Категории
+    const categories = [...new Set(data.map(item => item["категория"]))];
+    categories.forEach(category => {
+      const div = document.createElement("div");
+      div.className = "category-item";
+      div.textContent = category;
+      div.onclick = () => location.hash = encodeURIComponent(category);
+      categoryContainer.appendChild(div);
     });
-}
+  } else {
+    // Товары из категории
+    const filtered = data.filter(item => item["категория"] === hash);
+    filtered.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "product-card";
+      div.innerHTML = `
+        <img src="${item["изображение"]}" alt="${item["название"]}" />
+        <h3>${item["название"]}</h3>
+        <p>${item["цена"]} ₽</p>
+      `;
+      productsContainer.appendChild(div);
+    });
+  }
+});
