@@ -50,3 +50,42 @@ nav a.active {
   font-size: 16px;
   cursor: pointer;
 }
+
+#search-container {
+  padding: 10px;
+  background-color: #f5f5f5;
+}
+
+#searchInput {
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+#clearBtn {
+  margin-left: 5px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+#suggestions {
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+}
+
+#suggestions li {
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+  cursor: pointer;
+}
+
+#suggestions li:hover {
+  background-color: #eee;
+}
