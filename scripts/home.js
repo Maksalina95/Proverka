@@ -10,7 +10,8 @@ export async function showHome(container) {
   renderProducts(data);
 
   // Показываем поиск, т.к. мы на Главной
-  document.querySelector(".search-container").style.display = "flex";
+  const search = document.querySelector(".search-container");
+  if (search) search.style.display = "flex";
 }
 
 function renderProducts(products) {
