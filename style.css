@@ -50,3 +50,54 @@ nav a.active {
   font-size: 16px;
   cursor: pointer;
 }
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+#searchInput {
+  flex: 1;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
+
+#searchBtn {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 12px;
+  background-color: #00aaff;
+  color: white;
+  cursor: pointer;
+}
+
+#searchBtn:hover {
+  background-color: #008ecc;
+}
+
+#suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 0 0 12px 12px;
+}
+
+#suggestions li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+#suggestions li:hover {
+  background: #f0f0f0;
+}
