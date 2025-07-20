@@ -1,31 +1,28 @@
-// scripts/app.js
-import { showHome } from "./home.js";
-import { showCatalog } from "./catalog.js";
+function displayProducts(products) {
+  const productList = document.getElementById('productList');
+  productList.innerHTML = '';
 
-const content = document.getElementById("content");
-const navLinks = document.querySelectorAll("nav a");
-
-function setActive(page) {
-  navLinks.forEach(link => link.classList.remove("active"));
-  document.querySelector(`nav a[data-page="${page}"]`).classList.add("active");
-}
-
-async function loadPage(page) {
-  setActive(page);
-  if (page === "home") {
-    await showHome(content);
-  } else if (page === "catalog") {
-    await showCatalog(content);
+  if (products.length === 0) {
+    productList.innerHTML = '<p>Товары не найдены</p>';
+    return;
   }
+
+  products.forEach(product => {
+    const item = document.createElement('div');
+    item.className = 'product';
+    item.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" />
+      <h2>${product.name}</h2>
+      <p>${product.price} ₽</p>
+    `;
+    productList.appendChild(item);
+  });
 }
 
-navLinks.forEach(link => {
-  link.addEventListener("click", e => {
-    e.preventDefault();
-    const page = link.getAttribute("data-page");
-    loadPage(page);
-  });
+window.addEventListener('load', () => {
+  if (window.products) {
+    displayProducts(window.products);
+  } else {
+    console.error('Товары не загружены');
+  }
 });
-
-// Загрузка главной при старте
-loadPage("home");
