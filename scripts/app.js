@@ -10,14 +10,16 @@ function setActive(page) {
   document.querySelector(`nav a[data-page="${page}"]`).classList.add("active");
 }
 
-function hideSearch() {
-  const search = document.querySelector(".search-container");
-  if (search) search.style.display = "none";
-}
-
 async function loadPage(page) {
   setActive(page);
-  hideSearch(); // скрываем поиск на любой странице по умолчанию
+
+  // Показываем или скрываем поле поиска в зависимости от страницы
+  const searchContainer = document.querySelector(".search-container");
+  if (page === "home" || page === "catalog") {
+    searchContainer.style.display = "flex";
+  } else {
+    searchContainer.style.display = "none";
+  }
 
   if (page === "home") {
     await showHome(content);
@@ -37,5 +39,5 @@ navLinks.forEach(link => {
 // Загрузка главной при старте
 loadPage("home");
 
-// Инициализация глобального поиска
+// Глобальная инициализация поиска (кнопка + подсказки)
 setupSearchGlobal();
