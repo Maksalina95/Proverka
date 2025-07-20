@@ -51,46 +51,72 @@ nav a.active {
   cursor: pointer;
 }
 
-/* Поисковая панель */
-
+/* Новый стиль для поисковой строки */
 .search-container {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 5px; /* расстояние между инпутом и кнопками */
   padding: 10px 20px;
+  background: #fafafa;
+  border-bottom: 1px solid #ddd;
 }
 
 #searchInput {
-  flex: 1;
-  padding: 8px;
-  font-size: 16px;
-}
-
-#clearSearch, #searchBtn {
+  flex-grow: 1;
   padding: 8px 12px;
   font-size: 16px;
-  cursor: pointer;
-  background: #007bff;
-  border: none;
-  color: white;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  outline: none;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+#searchInput:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 3px #007bff;
+}
+
+#searchBtn {
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  user-select: none;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+#searchBtn:hover {
+  background-color: #0056b3;
 }
 
 #clearSearch {
-  background: #dc3545;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+  user-select: none;
+  padding: 0 6px;
+  line-height: 1;
 }
 
 #suggestions {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   position: absolute;
   background: white;
   border: 1px solid #ccc;
-  width: calc(100% - 40px);
+  list-style: none;
+  margin-top: 0;
+  padding-left: 0;
   max-height: 150px;
   overflow-y: auto;
-  z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 10;
 }
 
 #suggestions li {
@@ -99,5 +125,6 @@ nav a.active {
 }
 
 #suggestions li:hover {
-  background-color: #eee;
+  background-color: #007bff;
+  color: white;
 }
