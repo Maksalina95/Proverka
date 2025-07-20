@@ -1,4 +1,3 @@
-// scripts/catalog.js
 import { fetchSheetData } from "./config.js";
 import { showFilteredProducts } from "./filtered.js";
 
@@ -6,6 +5,9 @@ export async function showCatalog(container) {
   container.innerHTML = "<h2>Категории</h2><div id='categories'></div>";
   const data = await fetchSheetData();
   const list = document.getElementById("categories");
+
+  // Показываем поиск, т.к. мы в Каталоге
+  document.querySelector(".search-container").style.display = "flex";
 
   const categories = [...new Set(data.map(item => item["категория"]).filter(Boolean))];
 
@@ -46,6 +48,6 @@ function showSubcategories(container, data, category) {
   });
 
   document.getElementById("back").addEventListener("click", () => {
-    showCatalog(container); // ← вернуться к списку категорий
+    showCatalog(container);
   });
 }
