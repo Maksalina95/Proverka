@@ -1,46 +1,80 @@
 // scripts/search.js
-export function setupSearch(data, container) {
-  const input = document.getElementById("searchInput");
-  const clearBtn = document.getElementById("clearSearch");
+import { fetchSheetData } from "./config.js";
+import { showFilteredProducts } from "./filtered.js";
+
+export async function setupSearch(container) {
+  const searchInput = document.getElementById("searchInput");
   const suggestions = document.getElementById("suggestions");
+  const searchBtn = document.getElementById("searchBtn");
 
-  if (!input || !suggestions || !data || !container) return;
+  const data = await fetchSheetData();
 
-  input.addEventListener("input", () => {
-    const value = input.value.toLowerCase().trim();
+  function filterSuggestions(value) {
+    const filtered = data
+      .filter(item => item["название"]?.toLowerCase().includes(value.toLowerCase()))
+      .slice(0, 5); // до 5 подсказок
     suggestions.innerHTML = "";
 
-    if (!value) {
-      clearBtn.style.display = "none";
-      return;
-    }
-
-    clearBtn.style.display = "inline";
-
-    const filtered = data.filter(item =>
-      item["название"]?.toLowerCase().includes(value) ||
-      item["описание"]?.toLowerCase().includes(value)
-    );
-
-    filtered.slice(0, 5).forEach(item => {
+    filtered.forEach(item => {
       const li = document.createElement("li");
       li.textContent = item["название"];
       li.addEventListener("click", () => {
+        searchInput.value = item["название"];
         suggestions.innerHTML = "";
-        input.value = "";
-        clearBtn.style.display = "none";
-        container.innerHTML = `<h2>${item["название"]}</h2>
-          <img src="${item["фото"]}" alt="${item["название"]}">
-          <p>${item["описание"]}</p>
-          <p><strong>${item["цена"]}</strong></p>`;
+        showResults(item["название"]);
       });
       suggestions.appendChild(li);
     });
+  }
+
+  function showResults(value) {
+    const filtered = data.filter(item =>
+      item["название"]?.toLowerCase().includes(value.toLowerCase())
+    );
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<h2>Ничего не найдено</h2>`;
+      return;
+    }
+
+    container.innerHTML = `<h2>Результаты поиска для "${value}"</h2><div id="products"></div>`;
+    const list = document.getElementById("products");
+
+    filtered.forEach(item => {
+      if (!item["изображение"]) return;
+      const block = document.createElement("div");
+      block.className = "product";
+      block.innerHTML = `
+        <img src="${item["изображение"]}" alt="${item["название"]}" />
+        <h3>${item["название"]}</h3>
+        <p>${item["описание"]}</p>
+        <strong>${item["цена"]} ₽</strong>
+      `;
+      list.appendChild(block);
+    });
+  }
+
+  searchInput.addEventListener("input", (e) => {
+    const value = e.target.value.trim();
+    if (value.length > 0) {
+      filterSuggestions(value);
+    } else {
+      suggestions.innerHTML = "";
+    }
   });
 
-  clearBtn.addEventListener("click", () => {
-    input.value = "";
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const value = searchInput.value.trim();
+      suggestions.innerHTML = "";
+      showResults(value);
+    }
+  });
+
+  searchBtn.addEventListener("click", () => {
+    const value = searchInput.value.trim();
     suggestions.innerHTML = "";
-    clearBtn.style.display = "none";
+    showResults(value);
   });
 }
