@@ -1,9 +1,11 @@
-import { products } from './config.js'; // Товары
+import { fetchSheetData } from './config.js';
 
-export function initSearch() {
+export async function initSearch() {
   const input = document.getElementById('searchInput');
   const clearBtn = document.getElementById('clearBtn');
   const suggestions = document.getElementById('suggestions');
+
+  const products = await fetchSheetData(); // Загружаем данные из таблицы
 
   input.addEventListener('input', () => {
     const query = input.value.toLowerCase();
@@ -17,17 +19,17 @@ export function initSearch() {
     clearBtn.style.display = 'inline';
 
     const matches = products.filter(p =>
-      p.name.toLowerCase().includes(query) ||
-      p.description.toLowerCase().includes(query)
+      (p.название || '').toLowerCase().includes(query) ||
+      (p.описание || '').toLowerCase().includes(query)
     );
 
     matches.slice(0, 6).forEach(match => {
       const li = document.createElement('li');
-      li.textContent = match.name;
+      li.textContent = match.название || '';
       li.addEventListener('click', () => {
-        input.value = match.name;
+        input.value = match.название || '';
         suggestions.innerHTML = '';
-        // Тут можно сделать дополнительную навигацию или выделение
+        // Тут можно сделать навигацию или подсветку товара
       });
       suggestions.appendChild(li);
     });
