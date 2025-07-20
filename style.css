@@ -50,3 +50,50 @@ nav a.active {
   font-size: 16px;
   cursor: pointer;
 }
+
+/* Поиск */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #ccc;
+  position: relative;
+}
+
+.search-container input {
+  flex-grow: 1;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.search-container button {
+  padding: 6px 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#suggestions {
+  list-style: none;
+  margin: 0;
+  padding: 0 20px;
+  background: #fff;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  position: absolute;
+  width: calc(100% - 40px);
+  top: 100%;
+  left: 0;
+  z-index: 10;
+}
+
+#suggestions li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+#suggestions li:hover {
+  background-color: #f0f0f0;
+}
