@@ -1,36 +1,46 @@
-import { fetchSheetData } from "./config.js";
+// scripts/search.js
+export function setupSearch(data, container) {
+  const input = document.getElementById("searchInput");
+  const clearBtn = document.getElementById("clearSearch");
+  const suggestions = document.getElementById("suggestions");
 
-export function setupGlobalSearch(container) {
-  const searchInput = document.getElementById("searchInput");
+  if (!input || !suggestions || !data || !container) return;
 
-  if (!searchInput) return;
+  input.addEventListener("input", () => {
+    const value = input.value.toLowerCase().trim();
+    suggestions.innerHTML = "";
 
-  searchInput.addEventListener("input", async () => {
-    const query = searchInput.value.trim().toLowerCase();
+    if (!value) {
+      clearBtn.style.display = "none";
+      return;
+    }
 
-    if (query.length === 0) return;
+    clearBtn.style.display = "inline";
 
-    const data = await fetchSheetData();
-
-    const results = data.filter(item =>
-      item["название"]?.toLowerCase().includes(query) ||
-      item["описание"]?.toLowerCase().includes(query)
+    const filtered = data.filter(item =>
+      item["название"]?.toLowerCase().includes(value) ||
+      item["описание"]?.toLowerCase().includes(value)
     );
 
-    container.innerHTML = `<h2>Результаты поиска</h2><div id="products"></div>`;
-    const list = document.getElementById("products");
-
-    results.forEach(item => {
-      if (!item["изображение"]) return;
-      const block = document.createElement("div");
-      block.className = "product";
-      block.innerHTML = `
-        <img src="${item["изображение"]}" alt="${item["название"]}" />
-        <h3>${item["название"]}</h3>
-        <p>${item["описание"]}</p>
-        <strong>${item["цена"]} ₽</strong>
-      `;
-      list.appendChild(block);
+    filtered.slice(0, 5).forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item["название"];
+      li.addEventListener("click", () => {
+        suggestions.innerHTML = "";
+        input.value = "";
+        clearBtn.style.display = "none";
+        container.innerHTML = `<h2>${item["название"]}</h2>
+          <img src="${item["фото"]}" alt="${item["название"]}">
+          <p>${item["описание"]}</p>
+          <p><strong>${item["цена"]}</strong></p>`;
+      });
+      suggestions.appendChild(li);
     });
+  });
+
+  clearBtn.addEventListener("click", () => {
+    input.value = "";
+    suggestions.innerHTML = "";
+    clearBtn.style.display = "none";
   });
 }
