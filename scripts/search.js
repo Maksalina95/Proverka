@@ -1,66 +1,84 @@
 // scripts/search.js
-import { getProducts, renderCatalog } from "./catalog.js";
 
-const searchInput = document.getElementById('searchInput');
-const clearSearch = document.getElementById('clearSearch');
-const searchButton = document.getElementById('searchButton');
-const suggestionsList = document.getElementById('suggestionsList');
+import { fetchSheetData } from './config.js';
+import { showCatalog } from './catalog.js';
 
-let products = [];
+const searchInput = document.getElementById("searchInput");
+const suggestionsList = document.getElementById("suggestionsList");
+const clearBtn = document.getElementById("clearSearch");
+const searchBtn = document.getElementById("searchButton");
+const content = document.getElementById("content");
 
 async function initSearch() {
-  products = await getProducts();
+  if (!window.products || window.products.length === 0) {
+    window.products = await fetchSheetData();
+  }
 
-  searchInput.addEventListener('input', () => {
-    const query = searchInput.value.trim().toLowerCase();
-    clearSearch.style.display = query ? 'block' : 'none';
+  function filterProducts(query) {
+    const lower = query.toLowerCase();
+    return window.products.filter(p => p.название?.toLowerCase().includes(lower));
+  }
 
-    const filtered = products.filter(p =>
-      (p.name || p.название || '').toLowerCase().includes(query)
-    );
-
-    suggestionsList.innerHTML = '';
-    if (query && filtered.length) {
-      filtered.slice(0, 6).forEach(p => {
-        const li = document.createElement('li');
-        li.textContent = p.name || p.название;
-        li.onclick = () => {
-          searchInput.value = li.textContent;
-          clearSearch.style.display = 'block';
-          suggestionsList.innerHTML = '';
-          renderCatalog([p]); // показываем один товар
-        };
-        suggestionsList.appendChild(li);
-      });
-      suggestionsList.style.display = 'block';
-    } else {
-      suggestionsList.style.display = 'none';
+  function showSuggestions(filtered) {
+    suggestionsList.innerHTML = "";
+    if (!searchInput.value.trim()) {
+      suggestionsList.style.display = "none";
+      return;
     }
+
+    filtered.slice(0, 10).forEach(product => {
+      const li = document.createElement("li");
+      li.textContent = product.название;
+      li.addEventListener("click", () => {
+        searchInput.value = product.название;
+        suggestionsList.style.display = "none";
+        renderSearchResults([product]);
+      });
+      suggestionsList.appendChild(li);
+    });
+
+    suggestionsList.style.display = filtered.length ? "block" : "none";
+  }
+
+  function renderSearchResults(products) {
+    content.innerHTML = "";
+    products.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "product";
+      div.innerHTML = `
+        <h3>${p.название}</h3>
+        ${p.фото ? `<img src="${p.фото}" alt="${p.название}">` : ""}
+        ${p.цена ? `<p><strong>Цена:</strong> ${p.цена}</p>` : ""}
+        ${p.описание ? `<p>${p.описание}</p>` : ""}
+      `;
+      content.appendChild(div);
+    });
+  }
+
+  // Слушатели
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.trim();
+    clearBtn.style.display = query ? "block" : "none";
+
+    const filtered = filterProducts(query);
+    showSuggestions(filtered);
   });
 
-  clearSearch.addEventListener('click', () => {
-    searchInput.value = '';
-    clearSearch.style.display = 'none';
-    suggestionsList.innerHTML = '';
-    suggestionsList.style.display = 'none';
-    renderCatalog(products); // вернуть все товары
-    searchInput.focus();
+  clearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    clearBtn.style.display = "none";
+    suggestionsList.style.display = "none";
+    showCatalog(content); // Показать весь каталог
   });
 
-  searchButton.addEventListener('click', () => {
-    const query = searchInput.value.trim().toLowerCase();
-    const filtered = products.filter(p =>
-      (p.name || p.название || '').toLowerCase().includes(query)
-    );
-    renderCatalog(filtered);
-    suggestionsList.style.display = 'none';
-  });
-
-  document.addEventListener('click', e => {
-    if (!e.target.closest('.search-bar')) {
-      suggestionsList.style.display = 'none';
+  searchBtn.addEventListener("click", () => {
+    const query = searchInput.value.trim();
+    if (query) {
+      const filtered = filterProducts(query);
+      renderSearchResults(filtered);
+      suggestionsList.style.display = "none";
     }
   });
 }
 
-window.addEventListener("DOMContentLoaded", initSearch);
+initSearch();
