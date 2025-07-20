@@ -1,181 +1,200 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lobster&display=swap');
 
-/* Сброс и глобальные стили */
-* {
-  box-sizing: border-box;
+/* ОБЩИЕ СТИЛИ */
+body {
   margin: 0;
   padding: 0;
-}
-body {
   font-family: 'Poppins', sans-serif;
-  background: #fff;
+  background-color: #f8f8f8;
   color: #333;
-  line-height: 1.6;
 }
+
 a {
   text-decoration: none;
   color: inherit;
 }
-button {
-  font-family: inherit;
-  cursor: pointer;
-  border: none;
-  background: none;
-}
-img {
-  max-width: 100%;
-  display: block;
+
+h1, h2, h3 {
+  margin: 0;
 }
 
-/* Контейнер */
-.container {
-  padding: 16px;
-  max-width: 1200px;
-  margin: auto;
-}
-
-/* Хедер и нижнее меню */
-header, footer {
-  background: #fff;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-  position: fixed;
-  width: 100%;
-  z-index: 10;
-}
+/* ШАПКА */
 header {
+  background-color: #fff;
+  padding: 15px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
   top: 0;
-  padding: 10px 16px;
-}
-footer {
-  bottom: 0;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-}
-footer button {
-  font-size: 14px;
-  padding: 6px 10px;
-  background: #f8f8f8;
-  border-radius: 8px;
-  transition: 0.2s;
-}
-footer button.active,
-footer button:hover {
-  background: #2b8cff;
-  color: white;
+  z-index: 1000;
 }
 
-/* Скрытие всех блоков по умолчанию */
-.page {
-  display: none;
-  padding-top: 60px;
-  padding-bottom: 60px;
-}
-.page.active {
-  display: block;
+header h1 {
+  font-family: 'Lobster', cursive;
+  font-size: 28px;
+  color: #E91E63;
 }
 
-/* Поисковая строка */
-.search-bar {
+/* СТРОКА ПОИСКА */
+.search-container {
   display: flex;
   align-items: center;
-  margin: 20px 0;
-  border: 1px solid #ccc;
-  border-radius: 30px;
-  padding: 6px 12px;
-  background: #f2f2f2;
-}
-.search-bar input {
-  flex: 1;
-  padding: 8px 12px;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 16px;
-}
-.search-bar button {
-  background: #2b8cff;
-  color: white;
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-}
-.search-bar button:hover {
-  background: #007bff;
-}
-.search-clear {
-  display: none;
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  margin-left: 6px;
-  color: #666;
-}
-.search-clear.visible {
-  display: inline;
+  margin: 15px 20px;
+  position: relative;
 }
 
-/* Список автоподсказок */
-#suggestions {
-  margin-top: 8px;
-  list-style: none;
+#searchInput {
+  width: 100%;
+  padding: 10px 45px 10px 15px;
+  border-radius: 25px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #fff;
-  max-height: 150px;
-  overflow-y: auto;
+  font-size: 16px;
+  outline: none;
 }
-#suggestions li {
-  padding: 8px 12px;
+
+#clearSearch {
+  position: absolute;
+  right: 45px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #999;
+  cursor: pointer;
+  display: none;
+}
+
+#searchButton {
+  position: absolute;
+  right: 10px;
+  background-color: #E91E63;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
   cursor: pointer;
 }
-#suggestions li:hover {
-  background: #f0f0f0;
-}
 
-/* Товары */
-.products {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 12px;
-  margin-top: 16px;
-}
-.product {
+/* АВТОПОДСКАЗКИ */
+#suggestions {
+  list-style: none;
+  padding: 0;
+  margin: 5px 20px 0 20px;
   background: #fff;
   border: 1px solid #ddd;
-  border-radius: 12px;
-  overflow: hidden;
-  padding: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-  text-align: center;
-}
-.product img {
-  height: 140px;
-  object-fit: cover;
   border-radius: 8px;
-}
-.product h3 {
-  font-size: 16px;
-  margin: 8px 0 4px;
-}
-.product p {
-  font-size: 14px;
-  color: #666;
-}
-.product .price {
-  font-weight: 600;
-  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  position: absolute;
+  z-index: 10;
 }
 
-/* Адаптивность */
+#suggestions li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+#suggestions li:last-child {
+  border-bottom: none;
+}
+
+#suggestions li:hover {
+  background-color: #f0f0f0;
+}
+
+/* КАТАЛОГ */
+#catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.product {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 15px;
+  transition: transform 0.2s ease;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+}
+
+.product img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  height: 160px;
+}
+
+.product h3 {
+  font-size: 16px;
+  margin: 10px 0 5px;
+}
+
+.product p {
+  margin: 0;
+  font-weight: bold;
+  color: #E91E63;
+}
+
+.product .description {
+  font-size: 13px;
+  color: #666;
+  margin-top: 5px;
+}
+
+/* КНОПКИ СВЯЗИ */
+.contact-buttons {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.contact-buttons a {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 14px;
+  text-align: center;
+  border-radius: 8px;
+  color: #fff;
+  transition: 0.3s ease;
+}
+
+.contact-buttons .whatsapp {
+  background-color: #25D366;
+}
+
+.contact-buttons .telegram {
+  background-color: #0088cc;
+}
+
+.contact-buttons .instagram {
+  background-color: #C13584;
+}
+
+.contact-buttons a:hover {
+  opacity: 0.85;
+}
+
+/* АДАПТИВНОСТЬ */
 @media (max-width: 600px) {
-  .search-bar {
-    flex-direction: row;
-    gap: 8px;
+  .search-container {
+    margin: 10px;
   }
-  footer button {
-    font-size: 12px;
-    padding: 5px 8px;
+
+  #catalog {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .product img {
+    height: 140px;
   }
 }
