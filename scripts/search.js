@@ -3,7 +3,6 @@ import { fetchSheetData } from "./config.js";
 export async function setupSearchGlobal() {
   const input = document.getElementById("searchInput");
   const clearBtn = document.getElementById("clearSearch");
-  const searchBtn = document.getElementById("searchBtn");
   const suggestions = document.getElementById("suggestions");
 
   let allProducts = await fetchSheetData();
@@ -74,14 +73,6 @@ export async function setupSearchGlobal() {
       input.value = e.target.textContent;
       suggestions.innerHTML = "";
       search(input.value.toLowerCase());
-    }
-  });
-
-  searchBtn.addEventListener("click", () => {
-    const query = input.value.trim().toLowerCase();
-    if (query) {
-      suggestions.innerHTML = "";
-      search(query);
     }
   });
 }
