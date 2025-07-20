@@ -1,6 +1,7 @@
 // scripts/app.js
 import { showHome } from "./home.js";
 import { showCatalog } from "./catalog.js";
+import { setupGlobalSearch } from "./search.js"; // Добавлено
 
 const content = document.getElementById("content");
 const navLinks = document.querySelectorAll("nav a");
@@ -27,5 +28,6 @@ navLinks.forEach(link => {
   });
 });
 
-// Загрузка главной при старте
-loadPage("home");
+loadPage("home"); // Главная при запуске
+
+setupGlobalSearch(); // Глобальный поиск на всех страницах
