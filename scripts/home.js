@@ -1,30 +1,11 @@
 // scripts/home.js
 import { fetchSheetData } from "./config.js";
+import { setupSearch } from "./search.js";
 
 export async function showHome(container) {
-  container.innerHTML = `
-    <h2>Товары</h2>
-    <div id="products"></div>
-  `;
-
   const data = await fetchSheetData();
-  renderProducts(data);
-}
-
-function renderProducts(products) {
-  const list = document.getElementById("products");
-  list.innerHTML = "";
-
-  products.forEach(item => {
-    if (!item["изображение"]) return;
-    const block = document.createElement("div");
-    block.className = "product";
-    block.innerHTML = `
-      <img src="${item["изображение"]}" alt="${item["название"]}" />
-      <h3>${item["название"]}</h3>
-      <p>${item["описание"]}</p>
-      <strong>${item["цена"]} ₽</strong>
-    `;
-    list.appendChild(block);
-  });
+  container.innerHTML = `<h2>Добро пожаловать!</h2><p>Найди нужный товар через поиск</p>`;
+  
+  // Включаем поиск
+  setupSearch(data, container);
 }
