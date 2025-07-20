@@ -7,7 +7,8 @@ export async function showCatalog(container) {
   const list = document.getElementById("categories");
 
   // Показываем поиск, т.к. мы в Каталоге
-  document.querySelector(".search-container").style.display = "flex";
+  const search = document.querySelector(".search-container");
+  if (search) search.style.display = "flex";
 
   const categories = [...new Set(data.map(item => item["категория"]).filter(Boolean))];
 
