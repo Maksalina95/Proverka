@@ -1,4 +1,3 @@
-// scripts/app.js
 import { showHome } from "./home.js";
 import { showCatalog } from "./catalog.js";
 
@@ -29,6 +28,3 @@ navLinks.forEach(link => {
 
 // Загрузка главной при старте
 loadPage("home");
-
-import { setupSearchGlobal } from "./search.js";
-setupSearchGlobal(); // Глобальная инициализация поиска
