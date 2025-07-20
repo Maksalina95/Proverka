@@ -4,7 +4,7 @@ import { fetchSheetData } from './config.js';
 import { showCatalog } from './catalog.js';
 
 const searchInput = document.getElementById("searchInput");
-const suggestionsList = document.getElementById("suggestionsList");
+const suggestionsList = document.getElementById("suggestions");
 const clearBtn = document.getElementById("clearSearch");
 const searchBtn = document.getElementById("searchButton");
 const content = document.getElementById("content");
