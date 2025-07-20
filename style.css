@@ -1,66 +1,14 @@
-body {
-  font-family: sans-serif;
-  margin: 0;
-  padding-bottom: 60px;
-}
-
-#content {
-  padding: 20px;
-}
-
-.product img {
-  width: 100%;
-  max-height: 200px;
-  object-fit: cover;
-}
-
-.product, .category {
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-}
-
-nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #eee;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  border-top: 1px solid #ccc;
-}
-
-nav a {
-  text-decoration: none;
-  color: #333;
-  font-weight: bold;
-}
-
-nav a.active {
-  color: #007bff;
-}
-
-.subcategory-btn {
-  display: block;
-  background: #f0f0f0;
-  border: 1px solid #bbb;
-  padding: 10px;
-  margin-bottom: 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* Новый стиль для поисковой строки */
 .search-container {
   display: flex;
   align-items: center;
-  gap: 5px; /* расстояние между инпутом и кнопками */
+  gap: 6px;
   padding: 10px 20px;
   background: #fafafa;
   border-bottom: 1px solid #ddd;
+  position: relative; /* чтобы подсказки позиционировались правильно */
 }
 
+/* Поле ввода */
 #searchInput {
   flex-grow: 1;
   padding: 8px 12px;
@@ -69,14 +17,20 @@ nav a.active {
   border-radius: 4px;
   outline: none;
   box-sizing: border-box;
-  text-decoration: none;
+  text-decoration: none !important; /* убираем перечёркивание */
+  line-height: normal; /* нормальная высота строки */
+  color: #000;
+  background: #fff;
 }
 
+/* При фокусе */
 #searchInput:focus {
   border-color: #007bff;
   box-shadow: 0 0 3px #007bff;
+  text-decoration: none !important;
 }
 
+/* Кнопка Поиск */
 #searchBtn {
   padding: 8px 16px;
   font-size: 16px;
@@ -86,14 +40,17 @@ nav a.active {
   border-radius: 4px;
   color: white;
   user-select: none;
-  text-decoration: none;
+  text-decoration: none !important;
+  line-height: normal;
   transition: background-color 0.3s ease;
 }
 
+/* При наведении */
 #searchBtn:hover {
   background-color: #0056b3;
 }
 
+/* Кнопка Очистки */
 #clearSearch {
   background: transparent;
   border: none;
@@ -103,8 +60,10 @@ nav a.active {
   user-select: none;
   padding: 0 6px;
   line-height: 1;
+  text-decoration: none !important;
 }
 
+/* Подсказки */
 #suggestions {
   position: absolute;
   background: white;
@@ -117,14 +76,21 @@ nav a.active {
   width: 100%;
   box-sizing: border-box;
   z-index: 10;
+  text-decoration: none !important;
+  line-height: normal;
 }
 
 #suggestions li {
   padding: 8px 12px;
   cursor: pointer;
+  text-decoration: none !important;
+  line-height: normal;
+  color: #000;
 }
 
+/* Подсветка при наведении */
 #suggestions li:hover {
   background-color: #007bff;
   color: white;
+  text-decoration: none !important;
 }
