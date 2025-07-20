@@ -1,4 +1,3 @@
-// scripts/filtered.js
 import { fetchSheetData } from "./config.js";
 
 export async function showFilteredProducts(container, category, subcategory) {
@@ -26,7 +25,6 @@ export async function showFilteredProducts(container, category, subcategory) {
   });
 
   document.getElementById("back").addEventListener("click", () => {
-    // Назад к подкатегориям:
     import("./catalog.js").then(mod => mod.showCatalog(container));
   });
 }
