@@ -29,3 +29,6 @@ navLinks.forEach(link => {
 
 // Загрузка главной при старте
 loadPage("home");
+
+import { setupSearchGlobal } from "./search.js";
+setupSearchGlobal(); // Глобальная инициализация поиска
