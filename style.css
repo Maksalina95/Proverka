@@ -1,200 +1,141 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-/* ОБЩИЕ СТИЛИ */
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+body {
   font-family: 'Poppins', sans-serif;
-  background-color: #f8f8f8;
+  background-color: #f8f9fa;
   color: #333;
+  padding-bottom: 70px; /* для навигации внизу */
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-h1, h2, h3 {
-  margin: 0;
-}
-
-/* ШАПКА */
+/* Заголовок */
 header {
-  background-color: #fff;
-  padding: 15px 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  background-color: #ffffff;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  text-align: center;
 }
 
 header h1 {
-  font-family: 'Lobster', cursive;
-  font-size: 28px;
-  color: #E91E63;
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 15px;
 }
 
-/* СТРОКА ПОИСКА */
+/* Поисковая строка */
 .search-container {
   display: flex;
+  justify-content: center;
   align-items: center;
-  margin: 15px 20px;
+  gap: 8px;
+  flex-wrap: wrap;
   position: relative;
 }
 
-#searchInput {
-  width: 100%;
-  padding: 10px 45px 10px 15px;
+.search-container input[type="text"] {
+  width: 220px;
+  padding: 10px 36px 10px 12px;
+  border: 2px solid #ccc;
   border-radius: 25px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.search-container input:focus {
+  border-color: #007bff;
   outline: none;
 }
 
-#clearSearch {
+.search-container #clearSearch {
   position: absolute;
-  right: 45px;
+  right: 105px;
   background: none;
   border: none;
-  font-size: 18px;
-  color: #999;
+  font-size: 20px;
+  color: #888;
   cursor: pointer;
-  display: none;
 }
 
-#searchButton {
-  position: absolute;
-  right: 10px;
-  background-color: #E91E63;
-  color: #fff;
+.search-container #clearSearch:hover {
+  color: #ff3b3b;
+}
+
+.search-container button#searchBtn {
+  padding: 10px 16px;
+  background-color: #007bff;
+  color: white;
   border: none;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  font-size: 16px;
+  border-radius: 25px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-/* АВТОПОДСКАЗКИ */
+.search-container button#searchBtn:hover {
+  background-color: #0056b3;
+}
+
+/* Подсказки */
 #suggestions {
   list-style: none;
-  padding: 0;
-  margin: 5px 20px 0 20px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  max-height: 200px;
+  margin-top: 6px;
+  max-height: 160px;
   overflow-y: auto;
-  display: none;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  width: 250px;
   position: absolute;
-  z-index: 10;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99;
+  display: none;
 }
 
 #suggestions li {
   padding: 10px;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
-}
-
-#suggestions li:last-child {
-  border-bottom: none;
 }
 
 #suggestions li:hover {
-  background-color: #f0f0f0;
+  background-color: #f1f1f1;
 }
 
-/* КАТАЛОГ */
-#catalog {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
+/* Контент */
+#content {
   padding: 20px;
 }
 
-.product {
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  padding: 15px;
-  transition: transform 0.2s ease;
-}
-
-.product:hover {
-  transform: translateY(-5px);
-}
-
-.product img {
-  width: 100%;
-  border-radius: 10px;
-  object-fit: cover;
-  height: 160px;
-}
-
-.product h3 {
-  font-size: 16px;
-  margin: 10px 0 5px;
-}
-
-.product p {
-  margin: 0;
-  font-weight: bold;
-  color: #E91E63;
-}
-
-.product .description {
-  font-size: 13px;
-  color: #666;
-  margin-top: 5px;
-}
-
-/* КНОПКИ СВЯЗИ */
-.contact-buttons {
-  margin-top: 10px;
+/* Навигация */
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: white;
+  border-top: 1px solid #ddd;
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
 }
 
-.contact-buttons a {
-  flex: 1;
-  padding: 8px 10px;
+nav a {
+  text-decoration: none;
+  color: #666;
   font-size: 14px;
-  text-align: center;
-  border-radius: 8px;
-  color: #fff;
-  transition: 0.3s ease;
+  transition: color 0.3s;
 }
 
-.contact-buttons .whatsapp {
-  background-color: #25D366;
-}
-
-.contact-buttons .telegram {
-  background-color: #0088cc;
-}
-
-.contact-buttons .instagram {
-  background-color: #C13584;
-}
-
-.contact-buttons a:hover {
-  opacity: 0.85;
-}
-
-/* АДАПТИВНОСТЬ */
-@media (max-width: 600px) {
-  .search-container {
-    margin: 10px;
-  }
-
-  #catalog {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
-    padding: 10px;
-  }
-
-  .product img {
-    height: 140px;
-  }
+nav a.active,
+nav a:hover {
+  color: #007bff;
+  font-weight: bold;
 }
