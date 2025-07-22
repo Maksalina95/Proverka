@@ -31,44 +31,36 @@ header h1 {
 /* Поисковая строка */
 .search-container {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  flex-wrap: nowrap; /* Не переносить элементы на новую строку */
+  max-width: 100%;
+  margin: 0 auto;
   position: relative;
-  max-width: 320px; /* Максимальная ширина всего блока поиска */
-  margin: 0 auto; /* Центрируем контейнер */
 }
 
-.search-container input[type="text"] {
-  flex-grow: 1;       /* Поле занимает всё доступное пространство */
-  min-width: 0;       /* Чтобы не вылезало за контейнер */
+#searchInput {
+  flex: 1;
   padding: 10px 36px 10px 12px;
   border: 2px solid #ccc;
   border-radius: 25px;
   font-size: 14px;
-  transition: border-color 0.3s;
 }
 
-.search-container button#searchBtn {
-  flex-shrink: 0;     /* Не сжимается */
-  width: 80px;        /* Фиксированная ширина кнопки */
-  padding: 10px 0;
+#searchBtn {
+  padding: 10px 16px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  white-space: nowrap;
+  font-size: 14px;
 }
 
-.search-container button#searchBtn:hover {
-  background-color: #0056b3;
-}
-
-.search-container #clearSearch {
+#clearSearch {
   position: absolute;
-  right: 90px;        /* Чуть левее кнопки */
+  right: 120px; /* подвинем левее кнопки Найти */
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -77,6 +69,7 @@ header h1 {
   color: #888;
   cursor: pointer;
 }
+
 /* Подсказки */
 #suggestions {
   list-style: none;
