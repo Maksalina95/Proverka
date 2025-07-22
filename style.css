@@ -16,36 +16,37 @@ body {
 /* Заголовок */
 header {
   background-color: #ffffff;
-  padding: 20px;
+  padding: 0; /* убираем лишний отступ */
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  text-align: center;
 }
 
-/* Новый контейнер для заголовка и кнопки "Установить" */
+/* Контейнер заголовка и кнопки */
 .header-top {
+  position: relative;
+  padding: 12px 16px;
+  background-color: #f8f8ff;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
-  margin-bottom: 15px;
-  padding: 0 10px;
+  justify-content: center; /* центрируем заголовок */
 }
 
-header h1 {
-  font-size: 24px;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 15px;
+.header-top h1 {
+  font-size: 22px;
+  font-weight: bold;
+  color: #4b0082;
 }
 
-/* Кнопка установить - компактная, женственная, слева */
+/* Кнопка "Установить" — правый верхний угол, женственная */
 .install-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
   background-color: #ff69b4;
   color: white;
   border: none;
   border-radius: 20px;
-  padding: 4px 10px; /* меньше отступы */
-  font-size: 12px;   /* уменьшенный размер текста */
+  padding: 4px 10px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 3px 6px rgba(255, 105, 180, 0.3);
@@ -56,12 +57,10 @@ header h1 {
   height: auto;
 }
 
-/* Ховер эффект для кнопки */
 .install-button:hover {
-  background-color: #ff85c1; /* светлее */
+  background-color: #ff85c1;
 }
 
-/* Фокус для доступности */
 .install-button:focus {
   outline: 2px solid #ff1493;
   outline-offset: 2px;
@@ -78,7 +77,7 @@ header h1 {
   position: relative;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 0 10px;
+  padding: 10px;
 }
 
 #searchInput {
@@ -104,7 +103,7 @@ header h1 {
 
 #clearSearch {
   position: absolute;
-  right: 120px; /* подвинем левее кнопки Найти */
+  right: 120px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -120,7 +119,7 @@ header h1 {
   margin-top: 6px;
   max-height: 160px;
   overflow-y: auto;
-  background: rgba(255, 255, 255, 0.9); /* прозрачный фон */
+  background: rgba(255, 255, 255, 0.9);
   border: 1px solid #ccc;
   border-radius: 6px;
   width: 250px;
@@ -130,8 +129,8 @@ header h1 {
   transform: translateX(-50%);
   z-index: 100;
   display: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* лёгкая тень */
-  backdrop-filter: blur(4px); /* лёгкое размытие фона */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
 }
 
 #suggestions li {
@@ -194,15 +193,13 @@ html, body {
   width: 100%;
 }
 
-/* Подсказки адаптивно */
 #suggestions {
   width: 100%;
   max-width: 100%;
-  background-color: rgba(255, 255, 255, 0.95); /* Полупрозрачный фон */
-  backdrop-filter: blur(4px); /* Стеклянный эффект */
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
 }
 
-/* Медиазапрос: мелкие устройства */
 @media screen and (max-width: 480px) {
   header h1 {
     font-size: 20px;
@@ -212,8 +209,6 @@ html, body {
     font-size: 12px;
   }
 
-  /* Убираем изменение направления и отступы кнопки, чтобы кнопка "Найти" всегда была рядом */
-  
   #clearSearch {
     right: 20px;
   }
