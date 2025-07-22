@@ -41,3 +41,34 @@ loadPage("home");
 
 // Глобальная инициализация поиска (кнопка + подсказки)
 setupSearchGlobal();
+
+// Сохраняем событие, чтобы позже отобразить кнопку
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Отменяем автоматическое появление баннера
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Показываем кнопку
+  const installBtn = document.getElementById('installButton');
+  if (installBtn) {
+    installBtn.style.display = 'block';
+
+    // Когда пользователь нажимает кнопку
+    installBtn.addEventListener('click', () => {
+      installBtn.style.display = 'none';
+      deferredPrompt.prompt(); // Показываем системный баннер
+
+      // Ждём, что пользователь выберет
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('Пользователь установил приложение');
+        } else {
+          console.log('Пользователь отклонил установку');
+        }
+        deferredPrompt = null;
+      });
+    });
+  }
+});
