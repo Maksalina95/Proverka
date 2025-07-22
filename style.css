@@ -2,105 +2,196 @@
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
-  padding: 0;
   font-family: 'Poppins', sans-serif;
-  background-color: #f9f9f9;
+  background-color: #f8f9fa;
   color: #333;
+  padding-bottom: 70px; /* для навигации внизу */
 }
 
+/* Заголовок */
 header {
-  background-color: #6200ea;
-  color: white;
-  padding: 1rem;
+  background-color: #ffffff;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   text-align: center;
-  font-size: 1.5rem;
 }
 
-main {
-  padding: 1rem;
-  max-width: 600px;
-  margin: 0 auto;
+header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 15px;
 }
 
-/* 🔍 Поисковая строка */
+/* Поисковая строка */
 .search-container {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.search-wrapper {
-  display: flex;
-  flex-direction: row;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  max-width: 100%;
+  margin: 0 auto;
+  position: relative;
+  flex-direction: row;
   flex-wrap: wrap;
+  padding: 0 10px;
 }
 
 #searchInput {
   flex: 1;
-  padding: 0.6rem 1rem;
+  min-width: 180px;
+  padding: 10px 36px 10px 12px;
   border: 2px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  width: 100%;
+  border-radius: 25px;
+  font-size: 14px;
 }
 
-#searchInput:focus {
-  outline: none;
-  border-color: #6200ea;
-}
-
-#clearBtn {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: #999;
-}
-
-/* 🔘 Кнопка Найти */
-#applySearch {
-  padding: 0.6rem 1rem;
-  background-color: #6200ea;
+#searchBtn {
+  padding: 10px 16px;
+  background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 25px;
   cursor: pointer;
+  white-space: nowrap;
+  font-size: 14px;
+  height: 40px;
 }
 
-#applySearch:hover {
-  background-color: #5300d6;
-}
-
-/* 📃 Список автоподсказок */
-ul#suggestions {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  max-height: 200px;
-  overflow-y: auto;
-  background-color: white;
-  z-index: 1000;
+#clearSearch {
   position: absolute;
-  width: 100%;
-  top: 100%;
-  left: 0;
-}
-
-ul#suggestions li {
-  padding: 0.6rem 1rem;
+  right: 120px; /* подвинем левее кнопки Найти */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #888;
   cursor: pointer;
 }
 
-ul#suggestions li:hover {
-  background-color: #f0f0f0;
+/* Подсказки */
+#suggestions {
+  list-style: none;
+  margin-top: 6px;
+  max-height: 160px;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.9); /* прозрачный фон */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 250px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* лёгкая тень */
+  backdrop-filter: blur(4px); /* лёгкое размытие фона */
+}
+
+#suggestions li {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#suggestions li:hover {
+  background-color: rgba(240, 240, 240, 0.8);
+}
+
+/* Контент */
+#content {
+  padding: 20px;
+}
+
+/* Навигация */
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: white;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+  text-decoration: none;
+  color: #666;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+nav a.active,
+nav a:hover {
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* --- Адаптивность --- */
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+#content, header, nav {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Подсказки адаптивно */
+#suggestions {
+  width: 100%;
+  max-width: 100%;
+  background-color: rgba(255, 255, 255, 0.95); /* Полупрозрачный фон */
+  backdrop-filter: blur(4px); /* Стеклянный эффект */
+}
+
+/* Адаптивность */
+@media screen and (max-width: 480px) {
+  header h1 {
+    font-size: 20px;
+  }
+
+  nav a {
+    font-size: 12px;
+  }
+
+  #searchInput {
+    width: 100%;
+  }
+
+  #searchBtn {
+    width: auto;
+    margin-top: 8px;
+  }
+
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #suggestions li {
+    font-size: 14px;
+  }
+
+  #clearSearch {
+    right: 20px;
+  }
 }
