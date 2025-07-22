@@ -153,8 +153,11 @@ html, body {
 
 /* Адаптивный поисковый контейнер */
 .search-container {
-  flex-direction: column;
-  align-items: stretch;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .search-container input[type="text"] {
