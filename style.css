@@ -37,24 +37,21 @@ header {
 }
 
 /* Кнопка "Установить" — правый верхний угол, женственная */
+/* Кнопка "Установить" — аккуратно в углу */
 .install-button {
   position: absolute;
   top: 10px;
-  right: 15px;
-  background-color: #ff69b4;
+  right: 10px;
+  padding: 6px 10px;
+  font-size: 13px;
+  background-color: #8c52ff;
   color: white;
   border: none;
-  border-radius: 20px;
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 3px 6px rgba(255, 105, 180, 0.3);
+  z-index: 999;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease;
-  user-select: none;
-  white-space: nowrap;
-  min-width: 80px;
-  height: auto;
 }
 
 .install-button:hover {
