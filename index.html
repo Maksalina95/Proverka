@@ -5,28 +5,27 @@
   <title>МаксМаркет</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
- <link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#8c52ff" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#8c52ff" />
 </head>
 <body>
 
   <!-- Общий заголовок -->
   <header>
-  <header>
-  <h1>МаксМаркет</h1>
+    <div class="header-top">
+      <button id="installBtn" style="display:none;" class="install-button">
+        📲 Установить приложение
+      </button>
+      <h1>МаксМаркет</h1>
+    </div>
 
-  <!-- Кнопка установить приложение -->
-  <button id="installBtn" style="display: none;" class="install-button">
-    📲 Установить приложение
-  </button>
-
-  <!-- Поисковая строка -->
-  <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Поиск товаров..." />
-    <button id="clearSearch" style="display:none;">×</button>
-    <button id="searchBtn">Найти</button>
-    <ul id="suggestions"></ul>
-  </div>
+    <!-- Поисковая строка -->
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Поиск товаров..." />
+      <button id="clearSearch" style="display:none;">×</button>
+      <button id="searchBtn">Найти</button>
+      <ul id="suggestions"></ul>
+    </div>
   </header>
 
   <!-- Контент, который будет меняться -->
@@ -41,12 +40,12 @@
   <!-- Основной скрипт SPA -->
   <script type="module" src="scripts/app.js"></script>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-      .then(() => console.log("SW зарегистрирован"))
-      .catch(err => console.log("SW ошибка", err));
-  }
-</script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log("SW зарегистрирован"))
+        .catch(err => console.log("SW ошибка", err));
+    }
+  </script>
 </body>
 </html>
