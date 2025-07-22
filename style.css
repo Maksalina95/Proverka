@@ -1,216 +1,120 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Dancing+Script:wght@600&display=swap');
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
+/* Общие стили */
 body {
+  margin: 0;
   font-family: 'Poppins', sans-serif;
-  background-color: #f8f9fa;
-  color: #333;
-  padding-bottom: 70px; /* для навигации внизу */
+  background-color: #fef6fb;
 }
 
-/* Заголовок */
-header {
-  background-color: #ffffff;
-  padding: 0; /* убираем лишний отступ */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-/* Контейнер заголовка и кнопки */
-.header-top {
+/* Шапка сайта */
+.header {
   position: relative;
-  padding: 12px 16px;
-  background-color: #f8f8ff;
   display: flex;
   align-items: center;
-  justify-content: center; /* центрируем заголовок */
+  justify-content: space-between;
+  padding: 16px;
+  background-color: #fff0f5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.header-top h1 {
-  font-size: 22px;
-  font-weight: bold;
-  color: #4b0082;
+/* Заголовок "МаксМаркет" */
+.site-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 28px;
+  color: #ff69b4; /* Барби-розовый */
+  font-weight: 600;
+  margin-left: 8px;
 }
 
-/* Кнопка "Установить" — правый верхний угол, женственная */
-/* Кнопка "Установить" — аккуратно в углу */
+/* Кнопка установки (в правом верхнем углу) */
 .install-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 6px 10px;
-  font-size: 13px;
-  background-color: #8c52ff;
+  top: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #ff69b4;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  z-index: 999;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
 }
 
 .install-button:hover {
   background-color: #ff85c1;
 }
 
-.install-button:focus {
-  outline: 2px solid #ff1493;
-  outline-offset: 2px;
+/* Контейнер для содержимого */
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 16px;
 }
 
-/* Поисковая строка */
-.search-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  max-width: 100%;
-  margin: 0 auto;
-  position: relative;
-  flex-direction: row;
-  flex-wrap: wrap;
-  padding: 10px;
+/* Карточки товаров */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
 }
 
-#searchInput {
-  flex: 1;
-  min-width: 180px;
-  padding: 10px 36px 10px 12px;
-  border: 2px solid #ccc;
-  border-radius: 25px;
-  font-size: 14px;
-}
-
-#searchBtn {
-  padding: 10px 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  white-space: nowrap;
-  font-size: 14px;
-  height: 40px;
-}
-
-#clearSearch {
-  position: absolute;
-  right: 120px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #888;
-  cursor: pointer;
-}
-
-/* Подсказки */
-#suggestions {
-  list-style: none;
-  margin-top: 6px;
-  max-height: 160px;
-  overflow-y: auto;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 250px;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  display: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(4px);
-}
-
-#suggestions li {
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-#suggestions li:hover {
-  background-color: rgba(240, 240, 240, 0.8);
-}
-
-/* Контент */
-#content {
-  padding: 20px;
-}
-
-/* Навигация */
-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
+.product-card {
   background-color: white;
-  border-top: 1px solid #ddd;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
 }
 
-nav a {
-  text-decoration: none;
-  color: #666;
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+.product-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.product-card .info {
+  padding: 10px;
+}
+
+.product-card .title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.product-card .price {
   font-size: 14px;
-  transition: color 0.3s;
-}
-
-nav a.active,
-nav a:hover {
-  color: #007bff;
+  color: #ff69b4;
   font-weight: bold;
 }
 
-/* --- Адаптивность --- */
-
-img {
-  max-width: 100%;
-  height: auto;
+/* Кнопки контактов */
+.contact-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
 }
 
-html, body {
-  overflow-x: hidden;
-  width: 100%;
+.contact-buttons a {
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: white;
+  background-color: #ff69b4;
+  transition: background-color 0.3s;
 }
 
-#content, header, nav {
-  max-width: 100%;
-  width: 100%;
-}
-
-#suggestions {
-  width: 100%;
-  max-width: 100%;
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(4px);
-}
-
-@media screen and (max-width: 480px) {
-  header h1 {
-    font-size: 20px;
-  }
-
-  nav a {
-    font-size: 12px;
-  }
-
-  #clearSearch {
-    right: 20px;
-  }
-
-  #suggestions li {
-    font-size: 14px;
-  }
+.contact-buttons a:hover {
+  background-color: #ff85c1;
 }
