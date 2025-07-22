@@ -25,9 +25,10 @@ header {
 .header-top {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* кнопка слева, заголовок справа */
-  gap: 12px; /* расстояние между кнопкой и заголовком */
-  margin-bottom: 15px; /* отступ снизу перед поиском */
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 15px;
+  padding: 0 10px;
 }
 
 header h1 {
@@ -37,21 +38,22 @@ header h1 {
   margin-bottom: 15px;
 }
 
-/* Кнопка установить - женственная, округлая, нежная */
+/* Кнопка установить - компактная, женственная, слева */
 .install-button {
-  background-color: #ff69b4; /* нежно-розовый */
+  background-color: #ff69b4;
   color: white;
   border: none;
-  border-radius: 30px; /* округлая */
-  padding: 8px 16px;
-  font-size: 14px;
+  border-radius: 20px;
+  padding: 4px 10px; /* меньше отступы */
+  font-size: 12px;   /* уменьшенный размер текста */
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3); /* мягкая тень */
+  box-shadow: 0 3px 6px rgba(255, 105, 180, 0.3);
   transition: background-color 0.3s ease;
   user-select: none;
   white-space: nowrap;
-  min-width: 110px; /* чтобы кнопка была достаточно широкой */
+  min-width: 80px;
+  height: auto;
 }
 
 /* Ховер эффект для кнопки */
