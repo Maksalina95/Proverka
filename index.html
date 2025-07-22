@@ -10,20 +10,11 @@
 </head>
 <body>
 
-  <!-- Общий заголовок -->
-<header>
-  <div class="header-top">
-    <!-- Кнопка установки — появится в правом верхнем углу -->
-    <button id="installBtn" style="display: none;" class="install-button">📲 Установить</button>
-    
-    <h1>МаксМаркет</h1>
-  </div>
-
-  <!-- Поиск -->
-  <div class="search-container">
-    ...
-  </div>
-</header>
+  <!-- Заголовок и кнопка установки -->
+  <header class="header">
+    <h1 class="site-title">МаксМаркет</h1>
+    <button id="installButton" class="install-button">Установить</button>
+  </header>
 
   <!-- Поисковая строка -->
   <div class="search-container">
@@ -32,9 +23,8 @@
     <button id="searchBtn">Найти</button>
     <ul id="suggestions"></ul>
   </div>
-  </header>
 
-  <!-- Контент, который будет меняться -->
+  <!-- Контент -->
   <div id="content"></div>
 
   <!-- Навигация -->
@@ -43,9 +33,8 @@
     <a href="#" data-page="catalog">Каталог</a>
   </nav>
 
-  <!-- Основной скрипт SPA -->
+  <!-- Скрипты -->
   <script type="module" src="scripts/app.js"></script>
-
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
@@ -53,5 +42,6 @@
         .catch(err => console.log("SW ошибка", err));
     }
   </script>
+
 </body>
 </html>
