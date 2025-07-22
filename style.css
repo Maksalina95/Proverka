@@ -21,11 +21,48 @@ header {
   text-align: center;
 }
 
+/* Новый контейнер для заголовка и кнопки "Установить" */
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* кнопка слева, заголовок справа */
+  gap: 12px; /* расстояние между кнопкой и заголовком */
+  margin-bottom: 15px; /* отступ снизу перед поиском */
+}
+
 header h1 {
   font-size: 24px;
   font-weight: 600;
   color: #2c3e50;
   margin-bottom: 15px;
+}
+
+/* Кнопка установить - женственная, округлая, нежная */
+.install-button {
+  background-color: #ff69b4; /* нежно-розовый */
+  color: white;
+  border: none;
+  border-radius: 30px; /* округлая */
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3); /* мягкая тень */
+  transition: background-color 0.3s ease;
+  user-select: none;
+  white-space: nowrap;
+  min-width: 110px; /* чтобы кнопка была достаточно широкой */
+}
+
+/* Ховер эффект для кнопки */
+.install-button:hover {
+  background-color: #ff85c1; /* светлее */
+}
+
+/* Фокус для доступности */
+.install-button:focus {
+  outline: 2px solid #ff1493;
+  outline-offset: 2px;
 }
 
 /* Поисковая строка */
