@@ -34,12 +34,15 @@ header h1 {
   justify-content: center;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Не переносить элементы на новую строку */
   position: relative;
+  max-width: 320px; /* Максимальная ширина всего блока поиска */
+  margin: 0 auto; /* Центрируем контейнер */
 }
 
 .search-container input[type="text"] {
-  width: 220px;
+  flex-grow: 1;       /* Поле занимает всё доступное пространство */
+  min-width: 0;       /* Чтобы не вылезало за контейнер */
   padding: 10px 36px 10px 12px;
   border: 2px solid #ccc;
   border-radius: 25px;
@@ -47,27 +50,10 @@ header h1 {
   transition: border-color 0.3s;
 }
 
-.search-container input:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
-.search-container #clearSearch {
-  position: absolute;
-  right: 105px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #888;
-  cursor: pointer;
-}
-
-.search-container #clearSearch:hover {
-  color: #ff3b3b;
-}
-
 .search-container button#searchBtn {
-  padding: 10px 16px;
+  flex-shrink: 0;     /* Не сжимается */
+  width: 80px;        /* Фиксированная ширина кнопки */
+  padding: 10px 0;
   background-color: #007bff;
   color: white;
   border: none;
@@ -80,6 +66,17 @@ header h1 {
   background-color: #0056b3;
 }
 
+.search-container #clearSearch {
+  position: absolute;
+  right: 90px;        /* Чуть левее кнопки */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #888;
+  cursor: pointer;
+}
 /* Подсказки */
 #suggestions {
   list-style: none;
