@@ -1,4 +1,5 @@
 import { fetchSheetData } from "./config.js";
+import { showProductPage, setProductData } from "./productPage.js";
 
 export async function showHome(container) {
   container.innerHTML = `
@@ -7,14 +8,15 @@ export async function showHome(container) {
   `;
 
   const data = await fetchSheetData();
-  renderProducts(data);
+  setProductData(data); // 📦 передаём данные
+  renderProducts(data, container);
 }
 
-function renderProducts(products) {
+function renderProducts(products, container) {
   const list = document.getElementById("products");
   list.innerHTML = "";
 
-  products.forEach(item => {
+  products.forEach((item, index) => {
     if (!item["изображение"]) return;
     const block = document.createElement("div");
     block.className = "product";
@@ -24,6 +26,9 @@ function renderProducts(products) {
       <p>${item["описание"]}</p>
       <strong>${item["цена"]} ₽</strong>
     `;
+    block.addEventListener("click", () => {
+      showProductPage(container, index); // 🎯 открыть карточку
+    });
     list.appendChild(block);
   });
 }
