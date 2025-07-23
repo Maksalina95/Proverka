@@ -30,11 +30,11 @@ header {
   justify-content: space-between; /* ← добавлено */
 }
 
-.header-top h1 {
+.site-title {
   font-size: 22px;
   font-weight: 600;
-  font-family: 'Playfair Display', serif; /* ← добавлено */
-  color: #e0218a; /* ← обновлён цвет */
+  font-family: 'Playfair Display', serif;
+  color: #e0218a;
 }
 
 /* Кнопка "Установить" — аккуратно в углу */
