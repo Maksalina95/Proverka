@@ -30,15 +30,26 @@ export async function showFilteredProducts(container, category, subcategory) {
       <strong>${item["цена"]} ₽</strong>
     `;
 
-    block.addEventListener("click", () => {
-      setProductData(item);           // передаём данные
-      loadPage("product");            // загружаем product-разметку (из product.html)
+    block.addEventListener("click", async () => {
+      container.innerHTML = `
+        <div class="product-detail">
+          <img src="${item["изображение"]}" alt="${item["название"]}" />
+          <h2>${item["название"]}</h2>
+          <p>${item["описание"]}</p>
+          <strong>${item["цена"]} ₽</strong>
+          <button id="backToFiltered">← Назад</button>
+        </div>
+      `;
+
+      document.getElementById("backToFiltered").addEventListener("click", () => {
+        showFilteredProducts(container, category, subcategory);
+      });
     });
 
     list.appendChild(block);
   });
 
   document.getElementById("back").addEventListener("click", () => {
-    import("./catalog.js").then(mod => mod.showCatalog(container));
+    loadPage("categories");
   });
 }
