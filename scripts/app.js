@@ -45,7 +45,7 @@ function setActive(page) {
 }
 
 // Загрузка страницы и показ/скрытие поиска
-async function loadPage(page) {
+async function loadPage(page, data) {
   setActive(page);
 
   const searchContainer = document.querySelector(".search-container");
@@ -59,6 +59,8 @@ async function loadPage(page) {
     await showHome(content);
   } else if (page === "catalog") {
     await showCatalog(content);
+  } else if (page === "product") {
+    await showProductPage(content, data); // 🔥 вот эта строка отвечает за карточку товара
   }
 }
 
@@ -76,3 +78,5 @@ loadPage("home");
 
 // Инициализация поиска: кнопка и подсказки
 setupSearchGlobal();
+
+export { loadPage };
