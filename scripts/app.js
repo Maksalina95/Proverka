@@ -33,6 +33,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 import { showHome } from "./home.js";
 import { showCatalog } from "./catalog.js";
+import { showProductPage } from "./productPage.js"; // ✅ импортируем карточку товара
 import { setupSearchGlobal } from "./search.js";
 
 const content = document.getElementById("content");
