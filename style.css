@@ -214,53 +214,97 @@ html, body {
     font-size: 14px;
   }
 
+/* --- КАРТОЧКА ТОВАРА --- */
 .product-card {
   padding: 20px;
   background: #fff;
   border-radius: 16px;
+  max-width: 420px;
+  margin: 20px auto;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   text-align: center;
+  animation: fadeIn 0.3s ease;
 }
+
 .product-card img {
   max-width: 100%;
   height: auto;
-  margin-bottom: 10px;
+  border-radius: 12px;
+  margin-bottom: 15px;
 }
+
+.product-card h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.product-card p.description {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.product-card .price {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 15px;
+}
+
+/* --- КНОПКА WHATSAPP --- */
 .whatsapp-btn {
   background: #25D366;
   color: white;
-  padding: 10px 20px;
-  border-radius: 10px;
+  padding: 12px 20px;
+  border-radius: 12px;
   text-decoration: none;
+  font-weight: 600;
   display: inline-block;
   margin: 10px 0;
+  transition: background 0.3s ease;
 }
+
+.whatsapp-btn:hover {
+  background: #1eb954;
+}
+
+/* --- КНОПКИ ПЕРЕКЛЮЧЕНИЯ ТОВАРОВ --- */
 .nav-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  gap: 10px;
+  margin-top: 20px;
 }
+
 .nav-buttons button {
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 10px 16px;
+  border-radius: 10px;
   border: none;
   background: #eee;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
-/* Красивая кнопка "Назад" */
+.nav-buttons button:hover {
+  background: #ddd;
+}
+
+/* --- КНОПКА НАЗАД --- */
 .back-button {
   background-color: #d50b8b;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 20px;
   border: none;
   border-radius: 30px;
   font-size: 16px;
   cursor: pointer;
   margin-bottom: 20px;
   box-shadow: 0 4px 10px rgba(213, 11, 139, 0.3);
-  position: relative;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s;
+  display: inline-flex;
+  align-items: center;
 }
 
 .back-button::before {
@@ -270,4 +314,5 @@ html, body {
 
 .back-button:hover {
   background-color: #b70975;
+  transform: translateY(-2px);
 }
