@@ -16,12 +16,13 @@ body {
 /* Заголовок */
 .header {
   background-color: #ffffff;
-  padding: 16px 20px;
+  padding: 24px 20px; /* увеличена высота панели */
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  flex-wrap: wrap;
+  position: relative;
+  z-index: 10;
 }
 
 .site-title {
@@ -33,8 +34,8 @@ body {
 /* Кнопка "Установить" */
 .install-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 14px;
+  right: 14px;
   padding: 6px 12px;
   font-size: 13px;
   background-color: #D50B8B;
@@ -164,7 +165,7 @@ nav a:hover {
   font-weight: bold;
 }
 
-/* Общая адаптация */
+/* Адаптивность */
 img {
   max-width: 100%;
   height: auto;
@@ -175,7 +176,7 @@ html, body {
   width: 100%;
 }
 
-#content, header, nav {
+#content, .header, nav {
   max-width: 100%;
   width: 100%;
 }
@@ -187,61 +188,21 @@ html, body {
   backdrop-filter: blur(4px);
 }
 
-/* Адаптация для телефонов */
-@media screen and (max-width: 768px) {
-  .site-title {
-    font-size: 22px;
-  }
-
-  .install-button {
-    font-size: 12px;
-    padding: 5px 10px;
-    top: 8px;
-    right: 8px;
-  }
-
-  #searchInput {
-    font-size: 13px;
-  }
-
-  #searchBtn {
-    font-size: 13px;
-    height: 38px;
-  }
-
-  nav a {
-    font-size: 13px;
-  }
-}
-
 @media screen and (max-width: 480px) {
+  .header {
+    padding: 16px;
+  }
+
   .site-title {
     font-size: 20px;
   }
 
-  .install-button {
-    font-size: 11px;
-    padding: 4px 8px;
-    top: 6px;
-    right: 6px;
-  }
-
-  .search-container {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  #searchBtn {
-    width: 100%;
-    margin-top: 8px;
+  nav a {
+    font-size: 12px;
   }
 
   #clearSearch {
     right: 20px;
-  }
-
-  nav a {
-    font-size: 12px;
   }
 
   #suggestions li {
