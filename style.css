@@ -14,10 +14,13 @@ body {
 }
 
 /* Заголовок */
-header {
-  background-color: #ffffff;
-  padding: 0; /* убираем лишний отступ */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+.header {
+  background-color: #fff;
+  padding: 20px 16px; /* сверху и снизу 20px, по бокам 16px */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Контейнер заголовка и кнопки */
