@@ -21,7 +21,11 @@ export async function showFilteredProducts(container, category, subcategory) {
       <p>${item["описание"]}</p>
       <strong>${item["цена"]} ₽</strong>
     `;
-    list.appendChild(block);
+    block.addEventListener("click", () => {
+  sessionStorage.setItem("selectedProduct", JSON.stringify(item));
+  window.location.href = "product.html";
+});
+list.appendChild(block);
   });
 
   document.getElementById("back").addEventListener("click", () => {
