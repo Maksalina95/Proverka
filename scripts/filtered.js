@@ -1,5 +1,4 @@
 import { fetchSheetData } from "./config.js";
-import { loadPage } from "./app.js";
 import { setProductData } from "./productPage.js";
 
 export async function showFilteredProducts(container, category, subcategory) {
@@ -18,29 +17,29 @@ export async function showFilteredProducts(container, category, subcategory) {
 
   const list = document.getElementById("products");
 
-  // 👇 важное: передаём весь массив товаров + index
-  filtered.forEach((item, index) => {
+  filtered.forEach(item => {
     if (!item["изображение"]) return;
 
-    const block = document.createElement("div");
-    block.classList.add("product");
-
-    block.innerHTML = `
+    const card = document.createElement("div");
+    card.classList.add("product-card");
+    card.dataset.id = item.id;
+    card.innerHTML = `
       <img src="${item["изображение"]}" alt="${item["название"]}">
       <h3>${item["название"]}</h3>
-      <p>${item["цена"]} ₽</p>
+      <p>${item["описание"]}</p>
+      <strong>${item["цена"]} ₽</strong>
     `;
 
-    block.addEventListener("click", () => {
-      setProductData(filtered);            // передаём весь список!
-      loadPage("product", index);          // индекс нужного товара
+    card.addEventListener("click", () => {
+      setProductData(item); // сохраняем данные
+      history.pushState(null, "", `#product-${item.id}`); // изменяем адрес
+      window.dispatchEvent(new Event("hashchange")); // вызываем обновление
     });
 
-    list.appendChild(block);
+    list.appendChild(card);
   });
 
-  // Назад
   document.getElementById("back").addEventListener("click", () => {
-    import("./catalog.js").then(mod => mod.showCatalog(container));
+    history.back(); // возвращаемся назад
   });
 }
