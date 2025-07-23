@@ -12,8 +12,8 @@ export async function showProductPage(container, index) {
   currentIndex = index;
 
   container.innerHTML = `
-    <div class="product-card">
-      <button id="backBtn">← Назад</button>
+  <div class="product-card">
+    <button id="backBtn" class="back-button">Назад</button>
       <img src="${product["изображение"]}" alt="${product["название"]}" />
       <h2>${product["название"]}</h2>
       <p>${product["описание"]}</p>
