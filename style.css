@@ -21,6 +21,7 @@ body {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  flex-wrap: wrap;
 }
 
 .site-title {
@@ -163,7 +164,7 @@ nav a:hover {
   font-weight: bold;
 }
 
-/* Адаптивность */
+/* Общая адаптация */
 img {
   max-width: 100%;
   height: auto;
@@ -186,17 +187,61 @@ html, body {
   backdrop-filter: blur(4px);
 }
 
-@media screen and (max-width: 480px) {
-  header h1 {
-    font-size: 20px;
+/* Адаптация для телефонов */
+@media screen and (max-width: 768px) {
+  .site-title {
+    font-size: 22px;
+  }
+
+  .install-button {
+    font-size: 12px;
+    padding: 5px 10px;
+    top: 8px;
+    right: 8px;
+  }
+
+  #searchInput {
+    font-size: 13px;
+  }
+
+  #searchBtn {
+    font-size: 13px;
+    height: 38px;
   }
 
   nav a {
-    font-size: 12px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .site-title {
+    font-size: 20px;
+  }
+
+  .install-button {
+    font-size: 11px;
+    padding: 4px 8px;
+    top: 6px;
+    right: 6px;
+  }
+
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #searchBtn {
+    width: 100%;
+    margin-top: 8px;
   }
 
   #clearSearch {
     right: 20px;
+  }
+
+  nav a {
+    font-size: 12px;
   }
 
   #suggestions li {
