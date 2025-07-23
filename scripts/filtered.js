@@ -1,4 +1,5 @@
 import { fetchSheetData } from "./config.js";
+import { loadPage } from "./productCard.js"; // Импортируем функцию карточки товара
 
 export async function showFilteredProducts(container, category, subcategory) {
   const data = await fetchSheetData();
@@ -13,6 +14,7 @@ export async function showFilteredProducts(container, category, subcategory) {
 
   filtered.forEach(item => {
     if (!item["изображение"]) return;
+
     const block = document.createElement("div");
     block.className = "product";
     block.innerHTML = `
@@ -21,6 +23,12 @@ export async function showFilteredProducts(container, category, subcategory) {
       <p>${item["описание"]}</p>
       <strong>${item["цена"]} ₽</strong>
     `;
+
+    // Добавляем обработчик клика на карточку
+    block.addEventListener("click", () => {
+      loadPage(item); // Показываем карточку товара
+    });
+
     list.appendChild(block);
   });
 
