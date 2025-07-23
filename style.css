@@ -16,7 +16,7 @@ body {
 /* Заголовок */
 .header {
   background-color: #fff;
-  padding: 18px 16px; /* сверху и снизу 20px, по бокам 16px */
+  padding: 16px 16px; /* сверху и снизу 20px, по бокам 16px */
   display: flex;
   justify-content: space-between;
   align-items: center;
