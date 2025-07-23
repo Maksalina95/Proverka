@@ -12,44 +12,35 @@ export async function showFilteredProducts(container, category, subcategory) {
 
   container.innerHTML = `
     <h2>${subcategory}</h2>
-    <div id="products"></div>
+    <div id="products" class="products-grid"></div>
     <button id="back">← Назад</button>
   `;
 
   const list = document.getElementById("products");
 
-  filtered.forEach(item => {
+  // 👇 важное: передаём весь массив товаров + index
+  filtered.forEach((item, index) => {
     if (!item["изображение"]) return;
 
     const block = document.createElement("div");
-    block.className = "product";
+    block.classList.add("product");
+
     block.innerHTML = `
-      <img src="${item["изображение"]}" alt="${item["название"]}" />
+      <img src="${item["изображение"]}" alt="${item["название"]}">
       <h3>${item["название"]}</h3>
-      <p>${item["описание"]}</p>
-      <strong>${item["цена"]} ₽</strong>
+      <p>${item["цена"]} ₽</p>
     `;
 
-    block.addEventListener("click", async () => {
-      container.innerHTML = `
-        <div class="product-detail">
-          <img src="${item["изображение"]}" alt="${item["название"]}" />
-          <h2>${item["название"]}</h2>
-          <p>${item["описание"]}</p>
-          <strong>${item["цена"]} ₽</strong>
-          <button id="backToFiltered">← Назад</button>
-        </div>
-      `;
-
-      document.getElementById("backToFiltered").addEventListener("click", () => {
-        showFilteredProducts(container, category, subcategory);
-      });
+    block.addEventListener("click", () => {
+      setProductData(filtered);            // передаём весь список!
+      loadPage("product", index);          // индекс нужного товара
     });
 
     list.appendChild(block);
   });
 
+  // Назад
   document.getElementById("back").addEventListener("click", () => {
-    loadPage("categories");
+    import("./catalog.js").then(mod => mod.showCatalog(container));
   });
 }
