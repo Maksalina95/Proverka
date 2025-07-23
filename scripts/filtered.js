@@ -1,4 +1,6 @@
 import { fetchSheetData } from "./config.js";
+import { loadPage } from "./app.js";
+import { setProductData } from "./productPage.js";
 
 export async function showFilteredProducts(container, category, subcategory) {
   const data = await fetchSheetData();
@@ -8,11 +10,17 @@ export async function showFilteredProducts(container, category, subcategory) {
     item["подкатегория"] === subcategory
   );
 
-  container.innerHTML = `<h2>${subcategory}</h2><div id="products"></div><button id="back">← Назад</button>`;
+  container.innerHTML = `
+    <h2>${subcategory}</h2>
+    <div id="products"></div>
+    <button id="back">← Назад</button>
+  `;
+
   const list = document.getElementById("products");
 
   filtered.forEach(item => {
     if (!item["изображение"]) return;
+
     const block = document.createElement("div");
     block.className = "product";
     block.innerHTML = `
@@ -21,11 +29,13 @@ export async function showFilteredProducts(container, category, subcategory) {
       <p>${item["описание"]}</p>
       <strong>${item["цена"]} ₽</strong>
     `;
+
     block.addEventListener("click", () => {
-  sessionStorage.setItem("selectedProduct", JSON.stringify(item));
-  window.location.href = "product.html";
-});
-list.appendChild(block);
+      setProductData(item);           // передаём данные
+      loadPage("product");            // загружаем product-разметку (из product.html)
+    });
+
+    list.appendChild(block);
   });
 
   document.getElementById("back").addEventListener("click", () => {
