@@ -1,5 +1,6 @@
 import { fetchSheetData } from "./config.js";
 import { setProductData } from "./productPage.js";
+import { loadPage } from "./app.js"; // добавляем!
 
 export async function showFilteredProducts(container, category, subcategory) {
   const data = await fetchSheetData();
@@ -17,12 +18,11 @@ export async function showFilteredProducts(container, category, subcategory) {
 
   const list = document.getElementById("products");
 
-  filtered.forEach(item => {
+  filtered.forEach((item, index) => {
     if (!item["изображение"]) return;
 
     const card = document.createElement("div");
     card.classList.add("product-card");
-    card.dataset.id = item.id;
     card.innerHTML = `
       <img src="${item["изображение"]}" alt="${item["название"]}">
       <h3>${item["название"]}</h3>
@@ -31,15 +31,14 @@ export async function showFilteredProducts(container, category, subcategory) {
     `;
 
     card.addEventListener("click", () => {
-      setProductData(item); // сохраняем данные
-      history.pushState(null, "", `#product-${item.id}`); // изменяем адрес
-      window.dispatchEvent(new Event("hashchange")); // вызываем обновление
+      setProductData(filtered);           // ⬅️ весь список товаров
+      loadPage("product", index);         // ⬅️ текущий выбранный индекс
     });
 
     list.appendChild(card);
   });
 
   document.getElementById("back").addEventListener("click", () => {
-    history.back(); // возвращаемся назад
+    history.back();
   });
 }
