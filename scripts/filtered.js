@@ -1,5 +1,4 @@
 import { fetchSheetData } from "./config.js";
-import { loadPage } from "./app.js";
 import { setProductData } from "./productPage.js";
 
 export async function showFilteredProducts(container, category, subcategory) {
@@ -22,34 +21,21 @@ export async function showFilteredProducts(container, category, subcategory) {
     if (!item["изображение"]) return;
 
     const block = document.createElement("div");
-    block.className = "product";
+    block.classList.add("product-card");
     block.innerHTML = `
-      <img src="${item["изображение"]}" alt="${item["название"]}" />
+      <img src="${item["изображение"]}" alt="${item["название"]}">
       <h3>${item["название"]}</h3>
-      <p>${item["описание"]}</p>
-      <strong>${item["цена"]} ₽</strong>
+      <p>${item["цена"]} ₽</p>
     `;
 
-    block.addEventListener("click", async () => {
-      container.innerHTML = `
-        <div class="product-detail">
-          <img src="${item["изображение"]}" alt="${item["название"]}" />
-          <h2>${item["название"]}</h2>
-          <p>${item["описание"]}</p>
-          <strong>${item["цена"]} ₽</strong>
-          <button id="backToFiltered">← Назад</button>
-        </div>
-      `;
-
-      document.getElementById("backToFiltered").addEventListener("click", () => {
-        showFilteredProducts(container, category, subcategory);
-      });
+    block.addEventListener("click", () => {
+      setProductData(container, item); // тот же способ, как на главной
     });
 
     list.appendChild(block);
   });
 
   document.getElementById("back").addEventListener("click", () => {
-    loadPage("categories");
+    location.reload(); // или вызови функцию, которая показывает категории
   });
 }
