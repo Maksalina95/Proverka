@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@600&display=swap');
 
 * {
   box-sizing: border-box;
@@ -27,16 +27,16 @@ header {
   background-color: #f8f8ff;
   display: flex;
   align-items: center;
-  justify-content: center; /* центрируем заголовок */
+  justify-content: space-between; /* ← добавлено */
 }
 
 .header-top h1 {
   font-size: 22px;
-  font-weight: bold;
-  color: #4b0082;
+  font-weight: 600;
+  font-family: 'Playfair Display', serif; /* ← добавлено */
+  color: #e0218a; /* ← обновлён цвет */
 }
 
-/* Кнопка "Установить" — правый верхний угол, женственная */
 /* Кнопка "Установить" — аккуратно в углу */
 .install-button {
   position: absolute;
