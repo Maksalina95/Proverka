@@ -19,7 +19,7 @@ export async function showProductPage(container, index) {
       <p>${product["описание"]}</p>
       <strong>${product["цена"]} ₽</strong>
       <br />
-      <a href="https://wa.me/79376280080?text=${encodeURIComponent("Здравствуйте! Хочу заказать: " + product["название"] + " за " + product["цена"] + " ₽")}" target="_blank" class="whatsapp-btn">Заказать в WhatsApp</a>
+      <a href="https://wa.me/79376280080?text=${encodeURIComponent("Приветствую! Хочу заказать: " + product["название"] + " за " + product["цена"] + " ₽")}" target="_blank" class="whatsapp-btn">Заказать в WhatsApp</a>
       <div class="nav-buttons">
         <button id="prevProduct">← Предыдущий</button>
         <button id="nextProduct">Следующий →</button>
