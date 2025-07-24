@@ -1,56 +1,48 @@
-import { fetchSheetData } from "./config.js";
-import { showFilteredProducts } from "./filtered.js";
+import { setProductData, showProductPage } from "./productPage.js";
 
-export async function showCatalog(container) {
-  container.innerHTML = "<h2>Категории</h2><div id='categories'></div>";
-  const data = await fetchSheetData();
-  const list = document.getElementById("categories");
+export function showFilteredProducts(container, category, subcategory) {
+  fetch("./data.json") // или fetchSheetData(), если данные из Google Sheets
+    .then((res) => res.json())
+    .then((data) => {
+      const filtered = data.filter(item =>
+        item["категория"] === category &&
+        item["подкатегория"] === subcategory &&
+        item["изображение"] // фильтруем только товары с фото
+      );
 
-  // Показываем поиск, т.к. мы в Каталоге
-  const searchContainer = document.querySelector(".search-container");
-  if (searchContainer) {
-    searchContainer.style.display = "flex";
-  }
+      setProductData(filtered); // сохраняем отфильтрованный список для навигации
 
-  const categories = [...new Set(data.map(item => item["категория"]).filter(Boolean))];
+      container.innerHTML = `
+        <h2>${subcategory}</h2>
+        <div id="products" class="products-grid"></div>
+        <button id="back">← Назад</button>
+      `;
 
-  categories.forEach(cat => {
-    const btn = document.createElement("button");
-    btn.className = "category-btn";
-    btn.textContent = cat;
+      const list = document.getElementById("products");
 
-    btn.addEventListener("click", () => {
-      showSubcategories(container, data, cat);
+      filtered.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `
+          <img src="${item["изображение"]}" alt="${item["название"]}" />
+          <h3>${item["название"]}</h3>
+          <p>${item["описание"] || ""}</p>
+          <strong>${item["цена"]} ₽</strong>
+        `;
+
+        div.addEventListener("click", () => {
+          showProductPage(container, index); // показываем карточку товара
+        });
+
+        list.appendChild(div);
+      });
+
+      document.getElementById("back").addEventListener("click", () => {
+        window.history.back(); // можно заменить на showCatalog(container) если хочешь
+      });
+    })
+    .catch(err => {
+      container.innerHTML = `<p>Ошибка загрузки данных: ${err.message}</p>`;
+      console.error("Ошибка в showFilteredProducts:", err);
     });
-
-    list.appendChild(btn);
-  });
-}
-
-function showSubcategories(container, data, category) {
-  container.innerHTML = `<h2>${category}</h2><div id='subcategories'></div><button id="back">← Назад</button>`;
-  const list = document.getElementById("subcategories");
-
-  const subcats = [...new Set(
-    data
-      .filter(item => item["категория"] === category)
-      .map(item => item["подкатегория"])
-      .filter(Boolean)
-  )];
-
-  subcats.forEach(sub => {
-    const btn = document.createElement("button");
-    btn.className = "subcategory-btn";
-    btn.textContent = sub;
-
-    btn.addEventListener("click", () => {
-      showFilteredProducts(container, category, sub);
-    });
-
-    list.appendChild(btn);
-  });
-
-  document.getElementById("back").addEventListener("click", () => {
-    showCatalog(container);
-  });
 }
