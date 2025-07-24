@@ -1,70 +1,52 @@
 import { fetchSheetData } from "./config.js";
-import { showProductPage, setProductData } from "./productPage.js";
+import { setProductData, showProductPage } from "./productPage.js";
 
-export async function showCatalog(container) {
-  container.innerHTML = `<h2>Каталог</h2><div id="catalog"></div>`;
-
+export async function showFilteredProducts(container, category, subcategory) {
   const data = await fetchSheetData();
-  setProductData(data); // 💾 обязательно
 
-  // Собираем категории и подкатегории
-  const categories = {};
-  data.forEach((item, index) => {
-    const category = item["категория"];
-    const subcategory = item["подкатегория"];
+  const filtered = data.filter(item =>
+    item["категория"] === category &&
+    item["подкатегория"] === subcategory
+  );
 
-    if (!categories[category]) {
-      categories[category] = {};
-    }
-    if (!categories[category][subcategory]) {
-      categories[category][subcategory] = [];
-    }
-    categories[category][subcategory].push({ ...item, index });
-  });
+  // Сохраняем товары для перелистывания
+  setProductData(filtered);
 
-  const catalog = document.getElementById("catalog");
-  catalog.innerHTML = "";
+  container.innerHTML = `
+    <h2>${subcategory}</h2>
+    <div id="products" class="products-grid"></div>
+    <button id="back">← Назад</button>
+  `;
 
-  Object.entries(categories).forEach(([catName, subcats]) => {
-    const catBlock = document.createElement("div");
-    catBlock.className = "category-block";
-    const catTitle = document.createElement("h3");
-    catTitle.textContent = catName;
-    catBlock.appendChild(catTitle);
+  const list = document.getElementById("products");
 
-    Object.entries(subcats).forEach(([subcatName, items]) => {
-      const subcatBlock = document.createElement("div");
-      subcatBlock.className = "subcategory-block";
-      const subcatTitle = document.createElement("h4");
-      subcatTitle.textContent = subcatName;
-      subcatBlock.appendChild(subcatTitle);
+  filtered.forEach((item, index) => {
+    if (!item["изображение"]) return;
 
-      const list = document.createElement("div");
-      list.className = "product-list";
+    const card = document.createElement("div");
+    card.classList.add("product-card");
+    card.innerHTML = `
+      <img src="${item["изображение"]}" alt="${item["название"]}">
+      <h3>${item["название"]}</h3>
+      <p>${item["описание"] || ""}</p>
+      <strong>${item["цена"]} ₽</strong>
+    `;
 
-      items.forEach((item) => {
-        if (!item["изображение"]) return;
-
-        const block = document.createElement("div");
-        block.className = "product";
-        block.innerHTML = `
-          <img src="${item["изображение"]}" alt="${item["название"]}" />
-          <h3>${item["название"]}</h3>
-          <p>${item["описание"]}</p>
-          <strong>${item["цена"]} ₽</strong>
-        `;
-
-        block.addEventListener("click", () => {
-          showProductPage(container, item.index); // 📦
-        });
-
-        list.appendChild(block);
-      });
-
-      subcatBlock.appendChild(list);
-      catBlock.appendChild(subcatBlock);
+    card.addEventListener("click", () => {
+      showProductPage(container, index); // 🔥 Открываем карточку
     });
 
-    catalog.appendChild(catBlock);
+    list.appendChild(card);
+  });
+
+  document.getElementById("back").addEventListener("click", () => {
+    showCatalogFromFiltered(container, category);
+  });
+}
+
+// Возврат к подкатегориям
+function showCatalogFromFiltered(container, category) {
+  import("./catalog.js").then(module => {
+    module.showCatalog(container);
   });
 }
