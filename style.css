@@ -45,7 +45,7 @@ body {
   right: 10px;
   padding: 6px 10px;
   font-size: 13px;
-  background: linear-gradient(135deg, #ff69b4, #ffd700); /* Розовый -> Золотой */
+  background: linear-gradient(135deg, #D50B8B, #ffd700); /* #D50B8B -> Золотой */
   color: white;
   border: none;
   border-radius: 8px;
@@ -56,7 +56,7 @@ body {
 }
 
 .install-button:hover {
-  background: linear-gradient(135deg, #ff85c1, #ffe066); /* Чуть светлее при наведении */
+  background: linear-gradient(135deg, #e64ca0, #ffdf59); /* Чуть светлее при наведении */
 }
 
 .install-button:focus {
