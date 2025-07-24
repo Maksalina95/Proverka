@@ -29,7 +29,11 @@ list.appendChild(btn);
 }
 
 function showSubcategories(container, data, category) {
-container.innerHTML = <h2>${category}</h2><div id='subcategories'></div><button id="back">← Назад</button>;
+container.innerHTML = `
+  <h2>${category}</h2>
+  <div id='subcategories'></div>
+  <button id="back">← Назад</button>
+`;
 const list = document.getElementById("subcategories");
 
 const subcats = [...new Set(
