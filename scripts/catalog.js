@@ -1,58 +1,24 @@
-import { fetchSheetData } from "./config.js";
-import { showFilteredProducts } from "./filtered.js";
-
-export async function showCatalog(container) {
-container.innerHTML = "<h2>Категории</h2><div id='categories'></div>";
-const data = await fetchSheetData();
-const list = document.getElementById("categories");
-
-// Показываем поиск, т.к. мы в Каталоге
-const searchContainer = document.querySelector(".search-container");
-if (searchContainer) {
-searchContainer.style.display = "flex";
-}
-
-const categories = [...new Set(data.map(item => item["категория"]).filter(Boolean))];
-
-categories.forEach(cat => {
-const btn = document.createElement("button");
-btn.className = "category-btn";
-btn.textContent = cat;
-
-btn.addEventListener("click", () => {  
-  showSubcategories(container, data, cat);  
-});  
-
-list.appendChild(btn);
-
-});
-}
-
-function showSubcategories(container, data, category) {
-container.innerHTML = <h2>${category}</h2><div id='subcategories'></div><button id="back">← Назад</button>;
-const list = document.getElementById("subcategories");
-
-const subcats = [...new Set(
-data
-.filter(item => item["категория"] === category)
-.map(item => item["подкатегория"])
-.filter(Boolean)
-)];
-
-subcats.forEach(sub => {
-const btn = document.createElement("button");
-btn.className = "subcategory-btn";
-btn.textContent = sub;
-
-btn.addEventListener("click", () => {  
-  showFilteredProducts(container, category, sub);  
-});  
-
-list.appendChild(btn);
-
-});
-
-document.getElementById("back").addEventListener("click", () => {
-showCatalog(container);
-});
+import { showProductPage, setProductData } from "./productPage.js";  
+  
+export async function showCatalog(container, products) {  
+  container.innerHTML = `  
+    <div class="catalog">  
+      ${products.map((product, index) => `  
+        <div class="product-card" data-index="${index}">  
+          <img src="${product["изображение"]}" alt="${product["название"]}" />  
+          <h3>${product["название"]}</h3>  
+          <p>${product["цена"]} ₽</p>  
+        </div>  
+      `).join('')}  
+    </div>  
+  `;  
+  
+  // Сохраняем данные и вешаем обработчики на карточки  
+  setProductData(products);  
+  document.querySelectorAll(".product-card").forEach(card => {  
+    card.addEventListener("click", () => {  
+      const index = card.dataset.index;  
+      showProductPage(container, parseInt(index));  
+    });  
+  });  
 }
