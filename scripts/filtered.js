@@ -1,6 +1,5 @@
 import { fetchSheetData } from "./config.js";
-import { setProductData } from "./productPage.js";
-import { loadPage } from "./app.js"; // добавляем!
+import { setProductData, showProductPage } from "./productPage.js";
 
 export async function showFilteredProducts(container, category, subcategory) {
   const data = await fetchSheetData();
@@ -9,6 +8,9 @@ export async function showFilteredProducts(container, category, subcategory) {
     item["категория"] === category &&
     item["подкатегория"] === subcategory
   );
+
+  // Сохраняем товары для перелистывания
+  setProductData(filtered);
 
   container.innerHTML = `
     <h2>${subcategory}</h2>
@@ -26,19 +28,25 @@ export async function showFilteredProducts(container, category, subcategory) {
     card.innerHTML = `
       <img src="${item["изображение"]}" alt="${item["название"]}">
       <h3>${item["название"]}</h3>
-      <p>${item["описание"]}</p>
+      <p>${item["описание"] || ""}</p>
       <strong>${item["цена"]} ₽</strong>
     `;
 
     card.addEventListener("click", () => {
-      setProductData(filtered);           // ⬅️ весь список товаров
-      loadPage("product", index);         // ⬅️ текущий выбранный индекс
+      showProductPage(container, index); // 🔥 Открываем карточку
     });
 
     list.appendChild(card);
   });
 
   document.getElementById("back").addEventListener("click", () => {
-    history.back();
+    showCatalogFromFiltered(container, category);
+  });
+}
+
+// Возврат к подкатегориям
+function showCatalogFromFiltered(container, category) {
+  import("./catalog.js").then(module => {
+    module.showCatalog(container);
   });
 }
