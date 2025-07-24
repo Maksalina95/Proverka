@@ -1,48 +1,70 @@
-import { setProductData, showProductPage } from "./productPage.js";
+import { fetchSheetData } from "./config.js";
+import { showProductPage, setProductData } from "./productPage.js";
 
-export function showFilteredProducts(container, category, subcategory) {
-  fetch("./data.json") // или fetchSheetData(), если данные из Google Sheets
-    .then((res) => res.json())
-    .then((data) => {
-      const filtered = data.filter(item =>
-        item["категория"] === category &&
-        item["подкатегория"] === subcategory &&
-        item["изображение"] // фильтруем только товары с фото
-      );
+export async function showCatalog(container) {
+  container.innerHTML = `<h2>Каталог</h2><div id="catalog"></div>`;
 
-      setProductData(filtered); // сохраняем отфильтрованный список для навигации
+  const data = await fetchSheetData();
+  setProductData(data); // 💾 обязательно
 
-      container.innerHTML = `
-        <h2>${subcategory}</h2>
-        <div id="products" class="products-grid"></div>
-        <button id="back">← Назад</button>
-      `;
+  // Собираем категории и подкатегории
+  const categories = {};
+  data.forEach((item, index) => {
+    const category = item["категория"];
+    const subcategory = item["подкатегория"];
 
-      const list = document.getElementById("products");
+    if (!categories[category]) {
+      categories[category] = {};
+    }
+    if (!categories[category][subcategory]) {
+      categories[category][subcategory] = [];
+    }
+    categories[category][subcategory].push({ ...item, index });
+  });
 
-      filtered.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.className = "product";
-        div.innerHTML = `
+  const catalog = document.getElementById("catalog");
+  catalog.innerHTML = "";
+
+  Object.entries(categories).forEach(([catName, subcats]) => {
+    const catBlock = document.createElement("div");
+    catBlock.className = "category-block";
+    const catTitle = document.createElement("h3");
+    catTitle.textContent = catName;
+    catBlock.appendChild(catTitle);
+
+    Object.entries(subcats).forEach(([subcatName, items]) => {
+      const subcatBlock = document.createElement("div");
+      subcatBlock.className = "subcategory-block";
+      const subcatTitle = document.createElement("h4");
+      subcatTitle.textContent = subcatName;
+      subcatBlock.appendChild(subcatTitle);
+
+      const list = document.createElement("div");
+      list.className = "product-list";
+
+      items.forEach((item) => {
+        if (!item["изображение"]) return;
+
+        const block = document.createElement("div");
+        block.className = "product";
+        block.innerHTML = `
           <img src="${item["изображение"]}" alt="${item["название"]}" />
           <h3>${item["название"]}</h3>
-          <p>${item["описание"] || ""}</p>
+          <p>${item["описание"]}</p>
           <strong>${item["цена"]} ₽</strong>
         `;
 
-        div.addEventListener("click", () => {
-          showProductPage(container, index); // показываем карточку товара
+        block.addEventListener("click", () => {
+          showProductPage(container, item.index); // 📦
         });
 
-        list.appendChild(div);
+        list.appendChild(block);
       });
 
-      document.getElementById("back").addEventListener("click", () => {
-        window.history.back(); // можно заменить на showCatalog(container) если хочешь
-      });
-    })
-    .catch(err => {
-      container.innerHTML = `<p>Ошибка загрузки данных: ${err.message}</p>`;
-      console.error("Ошибка в showFilteredProducts:", err);
+      subcatBlock.appendChild(list);
+      catBlock.appendChild(subcatBlock);
     });
+
+    catalog.appendChild(catBlock);
+  });
 }
