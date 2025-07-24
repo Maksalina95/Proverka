@@ -45,7 +45,7 @@ body {
   right: 10px;
   padding: 6px 10px;
   font-size: 13px;
-  background-color: #D50B8B;
+  background-color: linear-gradient(135deg, #ff69b4, #ffd700); /* розовый → золотой */;
   color: white;
   border: none;
   border-radius: 8px;
