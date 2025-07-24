@@ -1,39 +1,58 @@
-import { loadPage } from "./app.js"; // чтобы вернуться назад
+import { fetchSheetData } from "./config.js";
+import { showFilteredProducts } from "./filtered.js";
 
-let products = [];
-let currentIndex = 0;
+export async function showCatalog(container) {
+container.innerHTML = "<h2>Категории</h2><div id='categories'></div>";
+const data = await fetchSheetData();
+const list = document.getElementById("categories");
 
-export function setProductData(data) {
-products = data;
+// Показываем поиск, т.к. мы в Каталоге
+const searchContainer = document.querySelector(".search-container");
+if (searchContainer) {
+searchContainer.style.display = "flex";
 }
 
-export function showProductPage(container, index) {
-const product = products[index];
-currentIndex = index;
+const categories = [...new Set(data.map(item => item["категория"]).filter(Boolean))];
 
-// Проверка на пустые значения перед отображением
-if (!product) return;
+categories.forEach(cat => {
+const btn = document.createElement("button");
+btn.className = "category-btn";
+btn.textContent = cat;
 
-container.innerHTML =   <div class="product-card large">   <button id="backBtn" class="back-button">← Назад</button>   <img src="${product["изображение"]}" alt="${product["название"]}" />   <h2>${product["название"]}</h2>   <p>${product["описание"] || "Описание отсутствует"}</p>   <strong>${product["цена"]} ₽</strong>   <br />   <a href="https://wa.me/79376280080?text=${encodeURIComponent("Привет! Хочу заказать: " + product["название"] + " за " + product["цена"] + " ₽")}" target="_blank" class="whatsapp-btn">Заказать в WhatsApp</a>   <div class="nav-buttons">   <button id="prevProduct">← Предыдущий</button>   <button id="nextProduct">Следующий →</button>   </div>   </div>  `;
+btn.addEventListener("click", () => {  
+  showSubcategories(container, data, cat);  
+});  
 
-// Обработчик для кнопки "Назад"
-document.getElementById("backBtn").onclick = () => loadPage("home");
+list.appendChild(btn);
 
-// Обработчик для кнопки "Предыдущий товар"
-document.getElementById("prevProduct").onclick = () => {
-if (currentIndex > 0) {
-showProductPage(container, currentIndex - 1);
-} else {
-alert("Это первый товар!");
+});
 }
-};
 
-// Обработчик для кнопки "Следующий товар"
-document.getElementById("nextProduct").onclick = () => {
-if (currentIndex < products.length - 1) {
-showProductPage(container, currentIndex + 1);
-} else {
-alert("Это последний товар!");
-}
-};
+function showSubcategories(container, data, category) {
+container.innerHTML = <h2>${category}</h2><div id='subcategories'></div><button id="back">← Назад</button>;
+const list = document.getElementById("subcategories");
+
+const subcats = [...new Set(
+data
+.filter(item => item["категория"] === category)
+.map(item => item["подкатегория"])
+.filter(Boolean)
+)];
+
+subcats.forEach(sub => {
+const btn = document.createElement("button");
+btn.className = "subcategory-btn";
+btn.textContent = sub;
+
+btn.addEventListener("click", () => {  
+  showFilteredProducts(container, category, sub);  
+});  
+
+list.appendChild(btn);
+
+});
+
+document.getElementById("back").addEventListener("click", () => {
+showCatalog(container);
+});
 }
