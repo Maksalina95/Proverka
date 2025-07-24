@@ -1,44 +1,150 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Мой Магазин</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Магазин</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 10px;
+    }
+    .product-list, .product-card {
+      display: none;
+    }
+    .product-list.active, .product-card.active {
+      display: block;
+    }
+    .product-item {
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .product-item:hover {
+      background-color: #f0f0f0;
+    }
+    .product-card img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      margin: 5px 0;
+    }
+    button.secondary {
+      background-color: #777;
+    }
+  </style>
 </head>
-  <!-- Заголовок и кнопка установки -->
-  <header class="header">
-    <h1 class="site-title">МаксМаркет</h1>
-    <button id="installButton" class="install-button">Установить</button>
-  </header>
+<body>
 
-  <!-- Поисковая строка -->
-  <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Поиск товаров..." />
-    <button id="clearSearch" style="display:none;">×</button>
-    <button id="searchBtn">Найти</button>
-    <ul id="suggestions"></ul>
+  <div id="product-list" class="product-list active"></div>
+
+  <div id="product-card" class="product-card">
+    <img id="card-image" src="" alt="">
+    <h2 id="card-title"></h2>
+    <p id="card-desc"></p>
+    <p><strong id="card-price"></strong></p>
+    <a id="whatsapp-link" href="#" target="_blank">
+      <button>Заказать сейчас</button>
+    </a>
+    <div class="buttons">
+      <button class="secondary" onclick="showPrevious()">← Предыдущий</button>
+      <button class="secondary" onclick="goBack()">Назад</button>
+      <button class="secondary" onclick="showNext()">Следующий →</button>
+    </div>
   </div>
 
-  <!-- Контент -->
-  <div id="content"></div>
-
-  <!-- Навигация -->
-  <nav>
-    <a href="#" data-page="home" class="active">Главная</a>
-    <a href="#" data-page="catalog">Каталог</a>
-  </nav>
-
-  <!-- Скрипты -->
-  <script type="module" src="scripts/app.js"></script>
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log("SW зарегистрирован"))
-        .catch(err => console.log("SW ошибка", err));
+    const products = [
+      {
+        title: "Платье летнее",
+        desc: "Лёгкое и стильное платье на каждый день.",
+        price: "2 500 ₽",
+        image: "https://via.placeholder.com/400x300?text=Платье"
+      },
+      {
+        title: "Кружка с узором",
+        desc: "Керамическая кружка, 350 мл, ручная работа.",
+        price: "750 ₽",
+        image: "https://via.placeholder.com/400x300?text=Кружка"
+      },
+      {
+        title: "Чемодан дорожный",
+        desc: "Прочный чемодан на колёсиках, 60 л.",
+        price: "6 900 ₽",
+        image: "https://via.placeholder.com/400x300?text=Чемодан"
+      }
+    ];
+
+    let currentIndex = 0;
+
+    const productList = document.getElementById('product-list');
+    const productCard = document.getElementById('product-card');
+
+    const cardTitle = document.getElementById('card-title');
+    const cardDesc = document.getElementById('card-desc');
+    const cardPrice = document.getElementById('card-price');
+    const cardImage = document.getElementById('card-image');
+    const whatsappLink = document.getElementById('whatsapp-link');
+
+    function renderList() {
+      productList.innerHTML = '';
+      products.forEach((product, index) => {
+        const item = document.createElement('div');
+        item.className = 'product-item';
+        item.innerHTML = `
+          <h3>${product.title}</h3>
+          <p>${product.price}</p>
+        `;
+        item.onclick = () => showCard(index);
+        productList.appendChild(item);
+      });
     }
+
+    function showCard(index) {
+      currentIndex = index;
+      const product = products[index];
+      cardTitle.textContent = product.title;
+      cardDesc.textContent = product.desc;
+      cardPrice.textContent = product.price;
+      cardImage.src = product.image;
+      whatsappLink.href = `https://wa.me/79376280080?text=Здравствуйте! Я хочу заказать: ${encodeURIComponent(product.title)} по цене ${encodeURIComponent(product.price)}`;
+      productList.classList.remove('active');
+      productCard.classList.add('active');
+    }
+
+    function goBack() {
+      productCard.classList.remove('active');
+      productList.classList.add('active');
+    }
+
+    function showPrevious() {
+      const prevIndex = (currentIndex - 1 + products.length) % products.length;
+      showCard(prevIndex);
+    }
+
+    function showNext() {
+      const nextIndex = (currentIndex + 1) % products.length;
+      showCard(nextIndex);
+    }
+
+    renderList();
   </script>
 
 </body>
