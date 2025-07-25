@@ -1,6 +1,6 @@
 import { fetchSheetData } from "./config.js";  
-import { showProductPage, setProductData, setProductIndex } from "./productPage.js";  
-import { loadPage } from "./app.js";
+import { setProductData, setProductIndex } from "./productPage.js";  
+import { loadPage } from "./app.js";  // пути в пределах scripts - правильно
 
 export async function showHome(container) {  
   container.innerHTML = `  
