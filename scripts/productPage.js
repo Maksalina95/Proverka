@@ -1,7 +1,4 @@
-import { fetchSheetData } from "./config.js";
-import { setProductData, setProductIndex } from "./productPage.js";  
-
-// 🧠 Хранилище для текущих товаров и выбранного индекса
+// Массив товаров и текущий индекс
 let productData = [];
 let productIndex = 0;
 
@@ -17,8 +14,7 @@ export function getCurrentProduct() {
   return productData[productIndex];
 }
 
-// 🏪 Показывает страницу отдельного товара
-export async function showProductPage(container, index) {
+export function showProductPage(container, index) {
   const product = productData[index];
   productIndex = index;
 
@@ -36,7 +32,6 @@ export async function showProductPage(container, index) {
     </div>
   `;
 
-  // Назад — просто history.back()
   document.getElementById("backToPrevious").addEventListener("click", () => {
     history.back();
   });
