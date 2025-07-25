@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Мой Магазин</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet" />
 </head>
 <body>
   <!-- Заголовок и кнопка установки -->
   <header class="header">
     <h1 class="site-title">МаксМаркет</h1>
-    <button id="installButton" class="install-button">Установить</button>
+    <!-- Исправлен id кнопки на installBtn -->
+    <button id="installBtn" class="install-button">Установить</button>
   </header>
 
   <!-- Поисковая строка -->
@@ -34,13 +35,28 @@
   <!-- Скрипты -->
   <script type="module" src="scripts/app.js"></script>
 
-  <!-- Service Worker -->
+  <!-- Service Worker и popstate обработчик -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log("SW зарегистрирован"))
-        .catch(err => console.log("SW ошибка", err));
+      navigator.serviceWorker
+        .register('sw.js')
+        .then(() => console.log('SW зарегистрирован'))
+        .catch((err) => console.log('SW ошибка', err));
     }
 
+    window.addEventListener('popstate', (event) => {
+      const state = event.state;
+
+      if (state && state.page) {
+        import('./scripts/app.js').then((module) => {
+          module.loadPage(state.page, state.data, true);
+        });
+      } else {
+        import('./scripts/app.js').then((module) => {
+          module.loadPage('home', null, true);
+        });
+      }
+    });
+  </script>
 </body>
 </html>
