@@ -20,11 +20,10 @@ window.addEventListener('beforeinstallprompt', (e) => {
   }
 });
 
-// ** Обрати внимание на пути: "./scripts/..." **
-import { showHome } from "./scripts/home.js";
-import { showCatalog } from "./scripts/catalog.js";
-import { showProductPage } from "./scripts/productPage.js";
-import { setupSearchGlobal } from "./scripts/search.js";
+import { showHome } from "./home.js";
+import { showCatalog } from "./catalog.js";
+import { showProductPage } from "./productPage.js";
+import { setupSearchGlobal } from "./search.js";
 
 const content = document.getElementById("content");
 const navLinks = document.querySelectorAll("nav a");
@@ -67,10 +66,11 @@ navLinks.forEach(link => {
   });
 });
 
+// Запуск по умолчанию
 loadPage("home");
 setupSearchGlobal();
 
-// ** Поправлен обработчик popstate - теперь вызывает loadPage **
+// Обработчик кнопки "назад/вперёд"
 window.onpopstate = (event) => {
   const state = event.state;
   if (state?.page) {
