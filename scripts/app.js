@@ -1,5 +1,3 @@
-// scripts/app.js
-
 // --- Логика PWA: показ кнопки "Установить" ---
 let deferredPrompt;
 
@@ -22,10 +20,11 @@ window.addEventListener('beforeinstallprompt', (e) => {
   }
 });
 
-import { showHome } from "./home.js";
-import { showCatalog } from "./catalog.js";
-import { showProductPage } from "./productPage.js";
-import { setupSearchGlobal } from "./search.js";
+// ** Обрати внимание на пути: "./scripts/..." **
+import { showHome } from "./scripts/home.js";
+import { showCatalog } from "./scripts/catalog.js";
+import { showProductPage } from "./scripts/productPage.js";
+import { setupSearchGlobal } from "./scripts/search.js";
 
 const content = document.getElementById("content");
 const navLinks = document.querySelectorAll("nav a");
@@ -71,22 +70,14 @@ navLinks.forEach(link => {
 loadPage("home");
 setupSearchGlobal();
 
-
-// ✅ Добавляем обработчик кнопки "назад/вперёд"
+// ** Поправлен обработчик popstate - теперь вызывает loadPage **
 window.onpopstate = (event) => {
   const state = event.state;
-
-  if (state?.page === "product") {
-    showProductPage(content, state.data);
-    setActive("catalog"); // или "product" при необходимости
-  } else if (state?.page === "catalog") {
-    showCatalog(content);
-    setActive("catalog");
-  } else if (state?.page === "home") {
-    showHome(content);
-    setActive("home");
+  if (state?.page) {
+    loadPage(state.page, state.data, true);
   } else {
-    showCatalog(content);
-    setActive("catalog");
+    loadPage("home", null, true);
   }
 };
+
+export { loadPage };
