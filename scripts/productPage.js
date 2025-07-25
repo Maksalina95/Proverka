@@ -83,19 +83,21 @@ export function showProductPage(container, index) {
   productIndex = index;
 
   container.innerHTML = `
-    <div class="product-page">
-      <button id="back">← Назад</button>
+    <div class="product-card">
+      <button class="back-button" id="backToPrevious">Назад</button>
       <img src="${product["изображение"]}" alt="${product["название"]}">
       <h2>${product["название"]}</h2>
-      <p>${product["описание"] || ""}</p>
-      <strong>${product["цена"]} ₽</strong>
-      <a href="https://wa.me/7XXXXXXXXXX?text=Здравствуйте, меня интересует товар: ${encodeURIComponent(product["название"])}" class="whatsapp-button" target="_blank">
-        Заказать в WhatsApp
+      <p class="description">${product["описание"] || ""}</p>
+      <div class="price">${product["цена"]} ₽</div>
+      <a href="https://wa.me/7XXXXXXXXXX?text=Здравствуйте, меня интересует товар: ${encodeURIComponent(product["название"])}"
+         class="whatsapp-btn" target="_blank">
+         Заказать в WhatsApp
       </a>
     </div>
   `;
 
-  document.getElementById("back").addEventListener("click", () => {
+  // 🔙 Назад — просто в историю
+  document.getElementById("backToPrevious").addEventListener("click", () => {
     history.back();
   });
 }
