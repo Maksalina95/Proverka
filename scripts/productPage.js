@@ -84,7 +84,7 @@ export function showProductPage(container, index) {
 
   container.innerHTML = `
     <div class="product-card">
-      <button class="back-button" id="backToPrevious">Назад</button>
+      <button class="back-button" id="backToPrevious">← Назад</button>
       <img src="${product["изображение"]}" alt="${product["название"]}">
       <h2>${product["название"]}</h2>
       <p class="description">${product["описание"] || ""}</p>
@@ -96,8 +96,14 @@ export function showProductPage(container, index) {
     </div>
   `;
 
-  // 🔙 Назад — просто в историю
+  // ✅ Назад — возвращает на предыдущую страницу, не выкидывая с сайта
   document.getElementById("backToPrevious").addEventListener("click", () => {
-    history.back();
+    if (document.referrer.includes(window.location.hostname)) {
+      history.back();
+    } else {
+      // Если перешли с внешнего сайта — отправляем на главную
+      window.location.hash = "#";
+      window.location.reload();
+    }
   });
 }
