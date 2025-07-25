@@ -42,23 +42,5 @@
         .catch(err => console.log("SW ошибка", err));
     }
 
-    // Обработка кнопки "назад"
-    <script>
-  window.addEventListener('popstate', (event) => {
-    const state = event.state;
-
-    // Если есть сохранённое состояние — загружаем нужную страницу
-    if (state && state.page) {
-      import('./scripts/app.js').then(module => {
-        module.loadPage(state.page, state.data, true);
-      });
-    } else {
-      // По умолчанию — домой
-      import('./scripts/app.js').then(module => {
-        module.loadPage("home", null, true);
-      });
-    }
-  });
-</script>
 </body>
 </html>
