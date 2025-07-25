@@ -43,11 +43,22 @@
     }
 
     // Обработка кнопки "назад"
-    window.addEventListener('popstate', () => {
-      const page = location.pathname === '/catalog' ? 'catalog' : 'home';
-      const navLink = document.querySelector(`nav a[data-page="${page}"]`);
-      if (navLink) navLink.click();
-    });
-  </script>
+    <script>
+  window.addEventListener('popstate', (event) => {
+    const state = event.state;
+
+    // Если есть сохранённое состояние — загружаем нужную страницу
+    if (state && state.page) {
+      import('./scripts/app.js').then(module => {
+        module.loadPage(state.page, state.data, true);
+      });
+    } else {
+      // По умолчанию — домой
+      import('./scripts/app.js').then(module => {
+        module.loadPage("home", null, true);
+      });
+    }
+  });
+</script>
 </body>
 </html>
