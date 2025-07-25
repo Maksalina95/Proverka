@@ -17,13 +17,10 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
       const { outcome } = await deferredPrompt.userChoice;
       console.log(`Пользователь выбрал: ${outcome}`);
-
       deferredPrompt = null;
     });
   }
 });
-
-// --- Основной код SPA ---
 
 import { showHome } from "./home.js";
 import { showCatalog } from "./catalog.js";
@@ -36,13 +33,10 @@ const navLinks = document.querySelectorAll("nav a");
 function setActive(page) {
   navLinks.forEach(link => link.classList.remove("active"));
   const activeLink = document.querySelector(`nav a[data-page="${page}"]`);
-  if (activeLink) {
-    activeLink.classList.add("active");
-  }
+  if (activeLink) activeLink.classList.add("active");
 }
 
-// ✅ Обновлённая версия loadPage
-export async function loadPage(page, options = {}) {
+async function loadPage(page, data, skipHistory = false) {
   setActive(page);
 
   const searchContainer = document.querySelector(".search-container");
@@ -52,27 +46,20 @@ export async function loadPage(page, options = {}) {
     searchContainer.style.display = "none";
   }
 
-  if (page === 'product') {
-    await showProductPage(options.container || content, options.index);
-  } else if (page === 'catalog') {
-    await showCatalog(options.container || content);
-  } else if (page === 'home') {
-    await showHome(options.container || content);
+  if (!skipHistory) {
+    const url = page === "product" ? `#product-${data}` : `#${page}`;
+    history.pushState({ page, data }, "", url);
   }
 
-  // ✅ Обновляем URL и добавляем в историю браузера
-  const url = new URL(window.location);
-  url.searchParams.set("page", page);
-  if (options.index !== undefined) {
-    url.searchParams.set("index", options.index);
-  } else {
-    url.searchParams.delete("index");
+  if (page === "home") {
+    await showHome(content);
+  } else if (page === "catalog") {
+    await showCatalog(content);
+  } else if (page === "product") {
+    await showProductPage(content, data);
   }
-
-  history.pushState({ page, index: options.index }, "", url);
 }
 
-// Обработчики ссылок меню
 navLinks.forEach(link => {
   link.addEventListener("click", e => {
     e.preventDefault();
@@ -81,8 +68,25 @@ navLinks.forEach(link => {
   });
 });
 
-// Загрузка стартовой страницы
 loadPage("home");
-
-// Инициализация поиска
 setupSearchGlobal();
+
+
+// ✅ Добавляем обработчик кнопки "назад/вперёд"
+window.onpopstate = (event) => {
+  const state = event.state;
+
+  if (state?.page === "product") {
+    showProductPage(content, state.data);
+    setActive("catalog"); // или "product" при необходимости
+  } else if (state?.page === "catalog") {
+    showCatalog(content);
+    setActive("catalog");
+  } else if (state?.page === "home") {
+    showHome(content);
+    setActive("home");
+  } else {
+    showCatalog(content);
+    setActive("catalog");
+  }
+};
