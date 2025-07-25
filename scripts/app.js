@@ -46,23 +46,30 @@ function setActive(page) {
 }  
   
 // Загрузка страницы и показ/скрытие поиска  
-async function loadPage(page, data) {  
-  setActive(page);  
-  
-  const searchContainer = document.querySelector(".search-container");  
-  if (page === "home" || page === "catalog") {  
-    searchContainer.style.display = "flex";  
-  } else {  
-    searchContainer.style.display = "none";  
-  }  
-  
-  if (page === "home") {  
-    await showHome(content);  
-  } else if (page === "catalog") {  
-    await showCatalog(content);  
-  } else if (page === "product") {  
-    await showProductPage(content, data); // 🔥 вот эта строка отвечает за карточку товара  
-  }  
+async function loadPage(page, data, skipHistory = false) {
+  setActive(page);
+
+  const searchContainer = document.querySelector(".search-container");
+  if (page === "home" || page === "catalog") {
+    searchContainer.style.display = "flex";
+  } else {
+    searchContainer.style.display = "none";
+  }
+
+  // ⬇️⬇️⬇️ Добавляем запись в историю
+  if (!skipHistory) {
+    const url = page === "product" ? `#product-${data}` : `#${page}`;
+    history.pushState({ page, data }, "", url);
+  }
+
+  // Загрузка контента
+  if (page === "home") {
+    await showHome(content);
+  } else if (page === "catalog") {
+    await showCatalog(content);
+  } else if (page === "product") {
+    await showProductPage(content, data);
+  }
 }  
   
 // Навешиваем обработчики на ссылки меню  
