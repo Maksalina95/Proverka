@@ -34,7 +34,7 @@ function setActive(page) {
   if (activeLink) activeLink.classList.add("active");
 }
 
-async function loadPage(page, data, skipHistory = false) {
+async function loadPage(page, data = null, skipHistory = false) {
   setActive(page);
 
   const searchContainer = document.querySelector(".search-container");
@@ -66,11 +66,11 @@ navLinks.forEach(link => {
   });
 });
 
-// Запуск по умолчанию
+// Стартовая загрузка
 loadPage("home");
 setupSearchGlobal();
 
-// Обработчик кнопки "назад/вперёд"
+// Обработка кнопок "назад/вперёд"
 window.onpopstate = (event) => {
   const state = event.state;
   if (state?.page) {
