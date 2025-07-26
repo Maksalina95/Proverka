@@ -1,83 +1,39 @@
-// --- Логика PWA: показ кнопки "Установить" ---
-let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-
-  const installBtn = document.getElementById('installBtn');
-  if (installBtn) {
-    installBtn.style.display = 'block';
-
-    installBtn.addEventListener('click', async () => {
-      installBtn.style.display = 'none';
-      deferredPrompt.prompt();
-
-      const { outcome } = await deferredPrompt.userChoice;
-      console.log(`Пользователь выбрал: ${outcome}`);
-      deferredPrompt = null;
-    });
-  }
-});
-
-import { showHome } from "./home.js";
 import { showCatalog } from "./catalog.js";
 import { showProductPage } from "./productPage.js";
-import { setupSearchGlobal } from "./search.js";
 
-const content = document.getElementById("content");
-const navLinks = document.querySelectorAll("nav a");
+export async function loadPage(page, options = {}, fromPopState = false) {
+  const container = options.container || document.getElementById("content");
 
-function setActive(page) {
-  navLinks.forEach(link => link.classList.remove("active"));
-  const activeLink = document.querySelector(`nav a[data-page="${page}"]`);
-  if (activeLink) activeLink.classList.add("active");
-}
-
-async function loadPage(page, data = null, skipHistory = false) {
-  setActive(page);
-
-  const searchContainer = document.querySelector(".search-container");
-  if (page === "home" || page === "catalog") {
-    searchContainer.style.display = "flex";
+  if (page === 'product') {
+    await showProductPage(container, options.index);
+  } else if (page === 'catalog') {
+    await showCatalog(container);
   } else {
-    searchContainer.style.display = "none";
+    container.innerHTML = '<h2>Главная страница</h2><p>Добро пожаловать!</p>';
   }
 
-  if (!skipHistory) {
-    const url = page === "product" ? `#product-${data}` : `#${page}`;
-    history.pushState({ page, data }, "", url);
+  // Обновляем URL и pushState только если НЕ из popstate
+  if (!fromPopState) {
+    const url = new URL(window.location);
+    url.searchParams.set("page", page);
+    if (page === "product" && options.index !== undefined) {
+      url.searchParams.set("index", options.index);
+    } else {
+      url.searchParams.delete("index");
+    }
+
+    history.pushState({ page, index: options.index }, "", url);
   }
 
-  if (page === "home") {
-    await showHome(content);
-  } else if (page === "catalog") {
-    await showCatalog(content);
-  } else if (page === "product") {
-    await showProductPage(content, data);
-  }
-}
-
-navLinks.forEach(link => {
-  link.addEventListener("click", e => {
-    e.preventDefault();
-    const page = link.getAttribute("data-page");
-    loadPage(page);
+  // Обновляем активную ссылку в навигации
+  document.querySelectorAll("nav a").forEach(link => {
+    link.classList.toggle("active", link.dataset.page === page);
   });
-});
+}
 
-// Стартовая загрузка
-loadPage("home");
-setupSearchGlobal();
+// Первичная загрузка
+const params = new URLSearchParams(window.location.search);
+const page = params.get("page") || "home";
+const index = params.get("index");
 
-// Обработка кнопок "назад/вперёд"
-window.onpopstate = (event) => {
-  const state = event.state;
-  if (state?.page) {
-    loadPage(state.page, state.data, true);
-  } else {
-    loadPage("home", null, true);
-  }
-};
-
-export { loadPage };
+loadPage(page, { container: document.getElementById("content"), index });
