@@ -50,12 +50,15 @@ async function loadPage(page, data, skipHistory = false) {
     history.pushState({ page, data }, "", url);
   }
 
+  // 👇 Вот здесь добавь этот блок:
   if (page === "home") {
     await showHome(content);
   } else if (page === "catalog") {
     await showCatalog(content);
   } else if (page === "product") {
     await showProductPage(content, data);
+  } else if (page === "profile") {
+    await showProfilePage(content); // 👈 вот этого блока у тебя не хватает
   }
 }
 
