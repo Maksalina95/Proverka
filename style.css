@@ -316,3 +316,50 @@ html, body {
   background-color: #b70975;
   transform: translateY(-2px);
 }
+
+  /* Сетка из 3 карточек */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+/* Сама карточка */
+.product-card {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.product-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.product-card:hover {
+  transform: scale(1.03);
+}
+
+.product-card h3 {
+  font-size: 1rem;
+  margin: 8px 0;
+}
+
+.product-card p {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.product-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.1rem;
+  color: #000;
+}
