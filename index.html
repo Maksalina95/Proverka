@@ -27,29 +27,47 @@
     <a href="#" data-page="catalog">Каталог</a>
   </nav>
 
-  <script type="module" src="scripts/app.js"></script>
+  <script type="module">
+    import { loadPage } from './scripts/app.js';
 
-  <script>
+    // Начальная загрузка страницы
+    const params = new URLSearchParams(window.location.search);
+    const page = params.get("page") || "home";
+    const index = params.get("index");
+
+    if (page === "product" && index !== null) {
+      loadPage("product", { container: document.getElementById("content"), index });
+    } else {
+      loadPage(page, { container: document.getElementById("content") });
+    }
+
+    // Слушатель popstate (назад/вперёд)
+    window.addEventListener('popstate', (event) => {
+      const state = event.state;
+      if (state?.page === "product") {
+        loadPage("product", { container: document.getElementById("content"), index: state.index }, true);
+      } else {
+        loadPage(state?.page || "home", { container: document.getElementById("content") }, true);
+      }
+    });
+
+    // Навигация по кнопкам
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const page = link.dataset.page;
+        loadPage(page, { container: document.getElementById("content") });
+        history.pushState({ page }, "", `?page=${page}`);
+      });
+    });
+
+    // Service Worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('sw.js')
         .then(() => console.log('SW зарегистрирован'))
         .catch((err) => console.log('SW ошибка', err));
     }
-
-    window.addEventListener('popstate', (event) => {
-      const state = event.state;
-
-      if (state && state.page) {
-        import('./scripts/app.js').then((module) => {
-          module.loadPage(state.page, state.data, true);
-        });
-      } else {
-        import('./scripts/app.js').then((module) => {
-          module.loadPage('home', null, true);
-        });
-      }
-    });
   </script>
 </body>
 </html>
