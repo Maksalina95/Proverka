@@ -320,9 +320,9 @@ html, body {
   /* Сетка из 3 карточек */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(190px, 1fr));
-  gap: 4px;
-  padding: 2px;
+  grid-template-columns: repeat(2, minmax(48%, 1fr)); /* чуть шире */
+  gap: 8px; /* немного больше расстояния */
+  padding: 8px;
 }
 
 @media (max-width: 480px) {
@@ -343,13 +343,14 @@ html, body {
   box-sizing: border-box;
   cursor: pointer;
   transition: transform 0.2s ease;
+  max-height: 100%; /* ограничивает высоту */
 }
 
 .product-card img {
   width: 100%;
-  height: 160px; /* ↓ ниже, чтобы карточка не была длинной */
+  aspect-ratio: 4 / 3; /* красиво обрезает любые размеры */
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 10px;
 }
 
 .product-card h3 {
