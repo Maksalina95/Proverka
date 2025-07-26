@@ -320,9 +320,9 @@ html, body {
   /* Сетка из 3 карточек */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(180px, 1fr));
-  gap: 6px; /* уменьшили отступ между карточками */
-  padding: 4px;
+  grid-template-columns: repeat(2, minmax(190px, 1fr));
+  gap: 4px;
+  padding: 2px;
 }
 
 @media (max-width: 480px) {
