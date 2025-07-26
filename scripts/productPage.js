@@ -33,6 +33,6 @@ export function showProductPage(container, index) {
   `;
 
   document.getElementById("backToPrevious").addEventListener("click", () => {
-    history.back(); // Работает как надо
+    history.back();
   });
 }
