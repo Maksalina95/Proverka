@@ -384,15 +384,3 @@ html, body {
     width: 100%; /* Одна карточка в ряд на маленьких экранах */
   }
 }
-
-@media (min-width: 601px) and (max-width: 899px) {
-  .product-card {
-    width: calc(50% - 1rem); /* Две карточки в ряд на средних экранах */
-  }
-}
-
-@media (min-width: 900px) {
-  .product-card {
-    width: calc(33.33% - 1rem); /* Три карточки в ряд на больших экранах */
-  }
-}
