@@ -32,7 +32,11 @@ export function showProductPage(container, index) {
     </div>
   `;
 
+  // Кнопка "Назад"
   document.getElementById("backToPrevious").addEventListener("click", () => {
     history.back();
   });
+
+  // Добавляем в историю браузера
+  history.pushState({ page: "product", index }, "", `?page=product&index=${index}`);
 }
