@@ -23,6 +23,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 import { showHome } from "./home.js";
 import { showCatalog } from "./catalog.js";
 import { showProductPage } from "./productPage.js";
+import { showProfilePage } from "./profile.js"; // 👈 Новый импорт
 import { setupSearchGlobal } from "./search.js";
 
 const content = document.getElementById("content");
